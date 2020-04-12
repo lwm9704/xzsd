@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.sort.dao.SecondSortDao">
+
+    <!--检验是否有重复的类-->
+    <select id="countSecondSort" parameterType="com.xzsd.pc.sort.entity.SecondSortInfo" resultType="int">
+        select count(second_sort_id)
+        from t_second_sort
+        where is_delete = 0
+        and father_sort_id = #{fatherSortId}
+        and second_sort_name = #{secondSortName}
+    </select>
+
+    <!--传参给一级分类,参数是二级分类数量-->
+    <update id="transmitFirstSort" parameterType="com.xzsd.pc.sort.entity.SecondSortInfo">
+        update t_first_sort
+        set
+            subclass_num = subclass_num + 1,
+            last_modify_by = #{creatBy},
+            modify_time = now(),
+            version = version + 1
+            where first_sort_id = #{fatherSortId}
+            and is_delete = 0
+    </update>
+
+    <!--新增二级分类-->
+    <insert id="addSecondSort" parameterType="com.xzsd.pc.sort.entity.SecondSortInfo">
+        insert into t_second_sort
+            (
+            second_sort_id,
+            second_sort_name,
+            father_sort_id,
+            remark,
+            is_delete,
+            creat_by,
+            creat_time,
+            last_modify_by,
+            modify_time,
+            version)
+        values
+            (
+            #{secondSortId},
+            #{secondSortName},
+            #{fatherSortId},
+            #{remark},
+            0,
+            #{creatBy},
+            now(),
+            #{lastModifyBy},
+            now(),
+            0)
+    </insert>
+
+    <!--二级分类列表-->
+    <select id="listSecondSort" parameterType="com.xzsd.pc.sort.entity.SecondSortInfo" resultType="com.xzsd.pc.sort.entity.SecondSortInfo">
+        select
+        a.second_sortId secondSortId,
+        a.second_sortName secondSortId
+        from t_second_sort as a
+        where is_delete = 0
+        and father_sort_id = #{fatherSortId}
+    </select>
+
+    <!--删除二级分类-->
+    <update id="deleteSecondSort" parameterType="com.xzsd.pc.sort.entity.SecondSortInfo">
+        update t_second_sort
+        set
+            is_delete = 1,
+            modify_time = now(),
+            last_modify_by = #{userId},
+            version = version + 1
+        where second_sort_id = #{secondSortId}
+    </update>
+
+    <!--修改二级分类信息-->
+    <update id="updateSecondSort" parameterType="com.xzsd.pc.sort.entity.SecondSortInfo">
+        update t_second_sort
+        set
+            second_sort_name = #{secondSortName},
+            remark = #{remark},
+            version = version + 1
+        where second_sort_id = #{secondSortId}
+        and version = #{version}
+    </update>
+
+    <!--获取二级分类信息-->
+    <select id="getSecondSortInfo" parameterType="java.lang.String" resultType="com.xzsd.pc.sort.entity.SecondSortInfo">
+        select
+            second_sort_name secondSortName,
+            remark
+        from t_second_sort
+        where second_sort_id = #{secondSortId}
+        and is_delete = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.customer.dao.CustomerDao">
+
+    <!--客户列表查询-->
+    <select id="listCustomer" parameterType="com.xzsd.pc.customer.entity.CustomerInfo" resultType="com.xzsd.pc.customer.entity.CustomerInfo">
+        select
+        user_acct customerAcct,
+        user_name customerName,
+        sex,
+        phone,
+        email,
+        id_card idCard
+        from t_sys_user as a left join t_customer as b
+        on a.user_id = b.user_id
+        where
+        is_delete = 0
+        <if test="customerName != null and customerName != ''">
+            and user_name like concat ('%',#{customerName},'%')
+        </if>
+        <if test="customerAcct != null and customerAcct != ''">
+            and user_acct like concat('%',#{customerAcct},'%')
+        </if>
+    </select>
+
+    <!--客户详情查询-->
+    <select id="getUserById" parameterType="java.lang.String" resultType="com.xzsd.pc.customer.entity.CustomerInfo">
+        select
+            user_acct customerAcct,
+            user_name customerName,
+            sex,
+            phone,
+            email,
+            id_card idCard
+        from t_sys_user as a left join t_customer as b
+        on a.user_id = b.user_id
+        where
+        a.user_id = #{customerId}
+        and is_delete = 0
+    </select>
+
+</mapper>

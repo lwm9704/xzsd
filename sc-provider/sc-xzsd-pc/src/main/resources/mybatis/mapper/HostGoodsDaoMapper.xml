@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.hostGoods.dao.HostGoodsDao">
+
+    <!--查询热门位商品列表-->
+    <select id="listHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoF" resultType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoV">
+        select
+        sort,
+        goods_id goodsId,
+        goods_name goodsName,
+        sales_price salesPrice,
+        goods_introduce goodsIntroduce,
+        from t_host_goods as a inner join t_goods as b
+        on a.goods_id = b.goods_id
+        and is_delete = 0
+    </select>
+
+    <!--新增热门位商品-->
+    <insert id="addHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoU">
+        insert into t_host_goods
+        (goods_Id,
+        sort,
+        is_delete,
+        creat_by,
+        creat_time,
+        version)
+        value
+        (#{goodsId},
+        #{sort},
+        0,
+        #{creatBy},
+        now(),
+        0)
+    </insert>
+
+    <!--修改热们位商品-->
+    <update id="updateHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoU">
+        update t_host_goods
+        set
+        goods_id = #{goodsId},
+        sort = #{sort},
+        last_modify_by = #{lastModifyBy},
+        modify_time = #{modifyTime},
+        version = version + 1
+        where
+        host_id = #{hostId}
+        and version = #{version}
+    </update>
+
+    <!--删除热门位商品-->
+    <update id="deleteHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoU">
+        update t_host_goods
+        set
+        is_delete = 1,
+        last_modify_by = #{lastModifyBy},
+        modify_time = #{modifyTime},
+        version = version + 1
+        where
+        host_id = #{hostId}
+    </update>
+</mapper>

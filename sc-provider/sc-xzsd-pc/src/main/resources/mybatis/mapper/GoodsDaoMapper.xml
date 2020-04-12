@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.goods.dao.GoodsDao">
+
+    <!--检验商品是否存在-->
+    <select id="countGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfoU" resultType="int">
+        select count(goods_Id)
+        from t_goods
+        where is_delete = 0
+        and goods_id = #{goodsId}
+    </select>
+
+    <!--新增商品-->
+    <select id="addGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfoU">
+        insert into t_goods
+        (
+        goods_id,
+        goods_name,
+        first_sort,
+        second_sort,
+        set_price,
+        sales_Price,
+        advert,
+        introduce,
+        stock,
+        isbn,
+        press,
+        <!--price_Url priceUrl-->
+        is_delete,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version
+        )
+        values
+        (#{goodsId},
+        #{goodsName},
+        #{firstSort},
+        #{secondSort},
+        #{setPrice},
+        #{salesPrice},
+        #{salesVolume},
+        #{advert},
+        #{introduce},
+        #{stock},
+        #{isbn},
+        #{press},
+        0,
+        #{creatBy},
+        now(),
+        #{lastModifyBy},
+        now(),
+        0 )
+    </select>
+
+    <!--删除商品-->
+    <select id="deleteGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfoU">
+        update t_goods
+        set
+        is_delete = 1,
+        last_modify_by = #{lastModifyBy},
+        modify_time = now()
+        version version + 1
+        where goods_id in
+        <foreach item="item" index="index" collection="listId" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--修改商品信息-->
+    <update id="updateGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfoU">
+        update t_goods
+        set
+        goods_name = #{goodsName},
+        first_sort = #{firstSort},
+        second_sort = #{secondSort},
+        set_price = #{setPrice},
+        sales_price = #{salesPrice},
+        advert = #{advert},
+        introduce = #{introduce},
+        stock = #{stock},
+        isbn = #{isbn},
+        press = #{press},
+        <!--price_Url = #{priceUrl}-->
+        last_modify_by = #{lastModifyBy},
+        modify_time = now(),
+        version = version + 1
+        where goods_id = #{goodsId}
+        and version = #{version}
+    </update>
+</mapper>

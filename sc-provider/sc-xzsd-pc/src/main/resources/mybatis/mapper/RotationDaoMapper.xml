@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.rotation.dao.RotationDao">
+
+    <!--新增轮播图-->
+    <insert id="uploadMg" parameterType="com.xzsd.pc.rotation.entity.RotationInfoU">
+        insert into t_rotation
+        (rotation_id,
+        sort,
+        picture_key,
+        url,
+        state,
+        star_time,
+        end_time,
+        goods_id,
+        is_delete,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version)
+        value
+        (#{rotationId},
+        #{sort},
+        #{pictureKey},
+        #{url},
+        0,
+        #{starTime},
+        #{endTime},
+        #{goodsId},
+        0,
+        #{creatBy},
+        now(),
+        #{lastModifyBy},
+        now(),
+        0)
+    </insert>
+
+    <!--删除轮播图-->
+    <update id="deleteMg" parameterType="com.xzsd.pc.rotation.entity.RotationInfoU">
+        update t_rotation
+        set
+        last_modify_by = #{userId},
+        modify_time = now(),
+        is_delete = #{isDelete},
+        version = version + 1
+        where rotation_id in
+        <foreach item="item" index="index" collection="listId" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--修改轮播图状态-->
+    <update id="updateMgState" parameterType="com.xzsd.pc.rotation.entity.RotationInfoU">
+        update t_rotation
+        set
+        state = #{state},
+        last_modify_by = #{lastModifyBy},
+        modify_time = now(),
+        version = version + 1
+        where rotation_id = #{rotationId}
+        and version = #{version}
+    </update>
+
+    <!--查询轮播图-->
+    <select id="listRotation" parameterType="java.lang.Integer" resultType="com.xzsd.pc.rotation.entity.RotationInfoU">
+        select
+        sort,
+        url,
+        state,
+        star_time starTime,
+        end_time endTime
+        from t_rotation
+        where state = #{state}
+    </select>
+
+    <!--检验该编号轮播图是否存在-->
+    <select id="countRotation" parameterType="java.lang.String" resultType="int">
+        select count(rotation_id)
+        from t_rotation
+        where rotation_id = #{rotationId}
+        and is_delete = 0
+    </select>
+</mapper>
