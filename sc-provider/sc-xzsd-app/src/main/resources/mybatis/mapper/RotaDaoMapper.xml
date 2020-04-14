@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.customer.rota.dao.RotaDao">
+
+    <!--获取轮播图-->
+    <select id="getRotaList" parameterType="java.lang.Integer" resultType="com.xzsd.app.customer.rota.entity.RotaInfoV">
+        select
+        picture_url rotaUrl,
+        goods_id goodsId,
+        rota_sort rotaSort
+        from t_rotatiom
+        where
+        state = 1
+        and
+        rota_sort &lt;= #{rotaSort}
+    </select>
+</mapper>
