@@ -88,4 +88,43 @@
         where goods_id = #{goodsId}
         and version = #{version}
     </update>
+
+    <!--查询商品列表-->
+    <select id="listGoods" parameterType="com.example.demo.goods.entity.GoodsInfoF" resultType="com.example.demo.goods.entity.GoodsInfoV">
+        select
+        goods_id goodsId,
+        goods_name goodsName,
+        set_price setPrice,
+        sales_price salesPrice,
+        sales_volume salesVolume,
+        first_sort firstSort,
+        second_sort secondSort,
+        advert,
+        introduce,
+        state,
+        shelf_time shelfTime,
+        browse,
+        business_id businessId,
+        business_name businessName,
+        stock,
+        isbn
+        from t_goods
+        where
+        is_delete = 0
+        <if test="goodsName != nulll and goodsName != ''">
+            and goods_name = #{goodsName}
+        </if>
+        <if test="goodsState != 2">
+            and goods_state = #{goodsState}
+        </if>
+        <if test="advert != nnull and advert !=''">
+            and advert = #{advert}
+        </if>
+        <if test="press != null and press != ''">
+            and press = #{press}
+        </if>
+        <if test="author != null and author != ''">
+            and author = #{author}
+        </if>
+    </select>
 </mapper>
