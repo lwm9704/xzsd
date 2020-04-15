@@ -38,15 +38,11 @@ public class RotationService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse uploadMg(RotationInfoA rotationInfoA){
+        //校验排序
         int countSort = rotationDao.countSort(rotationInfoA.getRotaSort());
         if(countSort != 0){
             return AppResponse.bizError("新增失败，该排序已存在，请重新输入");
         }
-        //连接腾讯云，上传图片并返回url
-        String key = cosClientUtil.upLoadMigc(rotationInfoA.getLocalMgPath());
-        rotationInfoA.setPictureKey(key);
-        String url = cosClientUtil.getMgUrl(key);
-        rotationInfoA.setUrl(url);
         rotationInfoA.setRotaId(StringUtil.getCommonCode(2));
         rotationInfoA.setCreatBy(AuthorUtil.getCurrentUserId());
         //存进数据库

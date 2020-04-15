@@ -20,10 +20,6 @@ public class RotationInfoA {
      */
     private String pictureKey;
     /**
-     * 轮播图本地路径
-     */
-    private String localMgPath;
-    /**
      * url
      */
     private String url;
@@ -90,14 +86,6 @@ public class RotationInfoA {
 
     public void setPictureKey(String pictureKey) {
         this.pictureKey = pictureKey;
-    }
-
-    public String getLocalMgPath() {
-        return localMgPath;
-    }
-
-    public void setLocalMgPath(String localMgPath) {
-        this.localMgPath = localMgPath;
     }
 
     public String getUrl() {
