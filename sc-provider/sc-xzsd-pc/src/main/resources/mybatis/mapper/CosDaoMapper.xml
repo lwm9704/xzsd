@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.cos.dao.CosDao">
+    <!--上传图片-->
+    <update id="uploadMg" parameterType="com.example.demo.cos.entity.MgInfo">
+        update ${tableName}
+        set
+        p_key = #{pKey},
+        p_url = #{pUrl}
+        where
+        ${mainId} = #{tableId}
+    </update>
+</mapper>
