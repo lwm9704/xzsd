@@ -90,7 +90,7 @@
     </update>
 
     <!--查询商品列表-->
-    <select id="listGoods" parameterType="com.example.demo.goods.entity.GoodsInfoF" resultType="com.example.demo.goods.entity.GoodsInfoV">
+    <select id="listGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfoF" resultType="com.xzsd.pc.goods.entity.GoodsInfoV">
         select
         goods_id goodsId,
         goods_name goodsName,
