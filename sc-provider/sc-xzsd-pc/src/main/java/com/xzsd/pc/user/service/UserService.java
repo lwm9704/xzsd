@@ -117,7 +117,7 @@ public class UserService {
      */
     public AppResponse getUserByUserId(String userId){
         UserInfo userInfo = userDao.getUserByUserId(userId);
-        return AppResponse.success("插叙成功",userInfo);
+        return AppResponse.success("查询成功",userInfo);
     }
 }
 

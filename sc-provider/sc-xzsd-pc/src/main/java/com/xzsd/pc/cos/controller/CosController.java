@@ -33,15 +33,15 @@ public class CosController {
     @PostMapping("upload")
     AppResponse uploadMg(@RequestParam(value = "file") MultipartFile file, MgInfo mgInfo, HttpSession session){
         try{
-            if(mgInfo.getFlag() == 1){
-                mgInfo.setTableName("t_rotation");
-                mgInfo.setMainId("rota_id");
-            }
-            else if(mgInfo.getFlag() == 0){
+            if(mgInfo.getFlag() == 0){
                 mgInfo.setTableName("t_goods");
                 mgInfo.setMainId("goods_id");
             }
-            else {
+            else if(mgInfo.getFlag() == 1){
+                mgInfo.setTableName("t_rotation");
+                mgInfo.setMainId("rota_id");
+            }
+            else if(mgInfo.getFlag() == 2){
                 mgInfo.setTableName("t_sys_user");
                 mgInfo.setMainId("user_id");
             }

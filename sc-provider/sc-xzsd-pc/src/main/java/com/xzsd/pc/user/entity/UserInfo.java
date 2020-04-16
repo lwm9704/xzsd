@@ -35,7 +35,7 @@ public class UserInfo {
     /**
      * 用户账号
      */
-    private String userAccount;
+    private String userAcct;
     /**
      * 用户密码
      */
@@ -68,30 +68,6 @@ public class UserInfo {
      * 版本号
      */
     private int version;
-    /**
-     *页码
-     */
-    private int pageSize;
-    /**
-     *页数
-     */
-    private int pageNum;
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
 
     public String getUserId() {
         return userId;
@@ -141,12 +117,12 @@ public class UserInfo {
         this.idCard = idCard;
     }
 
-    public String getUserAccount() {
-        return userAccount;
+    public String getUserAcct() {
+        return userAcct;
     }
 
-    public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount;
+    public void setUserAcct(String userAcct) {
+        this.userAcct = userAcct;
     }
 
     public String getPassword() {

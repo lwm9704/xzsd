@@ -60,6 +60,9 @@ public class CosService {
         if(file == null){
             return AppResponse.bizError("文件为空");
         }
+        if(mgInfo.getMainId() == null){
+            return AppResponse.bizError("主键编号为空");
+        }
         //获得上传时的key
         String oldFileName = file.getOriginalFilename();
         String eName = oldFileName.substring(oldFileName.lastIndexOf("."));

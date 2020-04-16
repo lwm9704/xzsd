@@ -6,7 +6,7 @@
         select count(user_acct)
         from t_sys_user
         where is_delete = 0
-        and user_acct = #{userAccount}
+        and user_acct = #{userAcct}
     </select>
 
     <!--新增用户-->
@@ -34,7 +34,7 @@
             #{phone},
             #{email},
             #{idCard},
-            #{userAccount},
+            #{userAcct},
             #{password},
             #{role},
             #{isDelete},
@@ -51,12 +51,13 @@
         select
         a.user_id userId,
         a.user_name userName,
-        a.user_acct userAccount,
+        a.user_acct userAcct,
         a.user_password password,
-        a.id_card idCard,
+        a.role,
         a.sex sex,
         a.phone phone,
         a.email email,
+        a.id_card idCard,
         a.is_delete isDelete,
         a.creat_by creatBy,
         a.creat_time creatTime,
@@ -65,13 +66,16 @@
         a.version version
         from t_sys_user a
         where a.is_delete = 0
-        <if test="userAccount != null and userAccount != ''">
-            and a.user_acct like concat('%',#{userAccount},'%')
+        <if test="userAcct != null and userAcct != ''">
+            and a.user_acct like concat('%',#{userAcct},'%')
         </if>
         <if test="userName != null and userName != ''">
             and a.user_name like concat('%',#{userName},'%')
         </if>
-        order by creatTime desc
+        <if test="role != 3">
+            and a.role = #{role}
+        </if>
+        order by creat_time desc
     </select>
 
     <!--删除用户-->
@@ -93,7 +97,7 @@
                 update t_sys_user
                 set
                     user_name = #{userName},
-                    user_acct = #{userAccount},
+                    user_acct = #{userAcct},
                     id_card = #{idCard},
                     sex = #{sex},
                     phone = #{phone},
@@ -110,7 +114,7 @@
         select
             user_id userId,
             user_name userName,
-            user_acct userAccount,
+            user_acct userAcct,
             user_password password,
             id_card idCard,
             sex,
