@@ -21,6 +21,7 @@
         <if test="customerAcct != null and customerAcct != ''">
             and user_acct like concat('%',#{customerAcct},'%')
         </if>
+        order by creat_time
     </select>
 
     <!--客户详情查询-->

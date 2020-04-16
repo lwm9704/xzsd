@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xzsd.app.customer.register.dao.RegisterDao">
+<mapper namespace="com.xzsd.app.register.dao.RegisterDao">
 
     <!--校验用户账号是否存在-->
     <select id="countUser" parameterType="java.lang.String" resultType="int">
@@ -33,7 +33,7 @@
     </select>
 
     <!--用户注册-->
-    <insert id="register" parameterType="com.xzsd.app.customer.register.entity.RegisterInfo">
+    <insert id="register" parameterType="com.xzsd.app.register.entity.RegisterInfo">
         insert into t_sys_user
         (user_id,
         user_acct,

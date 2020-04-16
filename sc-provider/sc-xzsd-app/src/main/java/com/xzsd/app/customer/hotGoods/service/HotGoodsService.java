@@ -26,6 +26,6 @@ public class HotGoodsService {
      */
     public AppResponse getHotGoodsList(){
         List<HotGoodsInfoV> hotGoodsInfoVList = hotGoodsDao.getHotGoodsByPage();
-        return AppResponse.success("查询成功",getPageInfo(hotGoodsInfoVList));
+        return AppResponse.success("查询成功",hotGoodsInfoVList);
     }
 }
