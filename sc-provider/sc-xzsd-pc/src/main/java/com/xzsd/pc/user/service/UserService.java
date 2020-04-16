@@ -6,6 +6,7 @@ import com.neusoft.util.StringUtil;
 import com.xzsd.pc.user.dao.UserDao;
 import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.util.AppResponse;
+import com.xzsd.pc.util.PasswordUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,17 +40,20 @@ public class UserService {
     public AppResponse saveUser(UserInfo userInfo){
         //校验账号是否存在
         int countUserAccount = userDao.countUserAcct(userInfo);
+        String pwd = PasswordUtils.generatePassword(userInfo.getPassword());
+        userInfo.setPassword(pwd);
         if(countUserAccount != 0){
             return AppResponse.bizError("用户已存在");
         }
-        userInfo.setUserId(StringUtil.getCommonCode(2));
+        String userId = StringUtil.getCommonCode(2);
+        userInfo.setUserId(userId);
         userInfo.setIsDelete(0);
         //新增用户
         int count = userDao.saveUser(userInfo);
         if(count == 0){
             return AppResponse.bizError("新增失败，请重新输入！");
         }
-        return AppResponse.bizError("新增成功");
+        return AppResponse.success("新增成功",userId);
     }
     /**
      * 查询用户列表（分页）

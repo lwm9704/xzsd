@@ -3,6 +3,7 @@ package com.xzsd.pc.hostGoods.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.util.StringUtil;
+import com.sun.jersey.core.impl.provider.entity.XMLRootObjectProvider;
 import com.xzsd.pc.hostGoods.dao.HostGoodsDao;
 import com.xzsd.pc.hostGoods.entity.HostGoodsInfoF;
 import com.xzsd.pc.hostGoods.entity.HostGoodsInfoU;
@@ -58,7 +59,9 @@ public class HostGoodsService {
      * @date 2020-4-6
      */
     public AppResponse listHostGoods(HostGoodsInfoF hostGoodsInfoF){
-        List<HostGoodsInfoV> hostGoodsInfoVList = hostGoodsDao.listHostGoodsByPage(hostGoodsInfoF);
+        //获取展示数量
+        int showNUm = hostGoodsDao.getShowNum();
+        List<HostGoodsInfoV> hostGoodsInfoVList = hostGoodsDao.listHostGoodsByPage(hostGoodsInfoF,showNUm);
         return AppResponse.success("查询成功",getPageInfo(hostGoodsInfoVList));
     }
     /**
@@ -107,4 +110,12 @@ public class HostGoodsService {
      * 设置展示数量
      * @param
      */
+    @Transactional(rollbackFor = Exception.class)
+    public AppResponse setShowNum(int showNum){
+        int count = hostGoodsDao.setShowNum(showNum);
+        if(count == 0){
+            return AppResponse.versionError("修改展示数量失败");
+        }
+        return AppResponse.success("修改展示数量成功");
+    }
 }

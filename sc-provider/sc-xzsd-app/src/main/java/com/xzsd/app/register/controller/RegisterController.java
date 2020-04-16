@@ -1,7 +1,7 @@
-package com.xzsd.app.customer.register.controller;
+package com.xzsd.app.register.controller;
 
-import com.xzsd.app.customer.register.entity.RegisterInfo;
-import com.xzsd.app.customer.register.service.RegisterService;
+import com.xzsd.app.register.entity.RegisterInfo;
+import com.xzsd.app.register.service.RegisterService;
 import com.xzsd.app.util.AppResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.xzsd.app.customer.register.entity;
+package com.xzsd.app.register.entity;
 
 public class RegisterInfo {
     /**

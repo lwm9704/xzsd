@@ -12,7 +12,10 @@
         goods_introduce goodsIntroduce,
         from t_host_goods as a inner join t_goods as b
         on a.goods_id = b.goods_id
+        where
+        sort &lt; #{showNum}
         and is_delete = 0
+        order by sort
     </select>
 
     <!--新增热门位商品-->
@@ -58,4 +61,25 @@
         where
         host_id = #{hostId}
     </update>
+
+    <!--设置展示数量-->
+    <update id="setShowNum" parameterType="java.lang.String">
+        update t_show
+        set
+        show_num =#{showNum}
+        last_modify_by = #{lastModifyBy},
+        modify_time = #{modifyTime},
+        version = version + 1
+        where
+        is_delete = 0
+    </update>
+
+    <!--获取展示数量-->
+    <select id="getShowNum" resultType="int">
+        select
+        show_num showNum
+        from t_show
+        where
+        is_delete = 0
+    </select>
 </mapper>

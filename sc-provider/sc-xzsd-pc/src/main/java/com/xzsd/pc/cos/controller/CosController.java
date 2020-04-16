@@ -37,9 +37,13 @@ public class CosController {
                 mgInfo.setTableName("t_rotation");
                 mgInfo.setMainId("rota_id");
             }
-            else {
+            else if(mgInfo.getFlag() == 0){
                 mgInfo.setTableName("t_goods");
                 mgInfo.setMainId("goods_id");
+            }
+            else {
+                mgInfo.setTableName("t_sys_user");
+                mgInfo.setMainId("user_id");
             }
             return cosService.upLoadMigc(file,mgInfo,session);
         }catch (Exception e){

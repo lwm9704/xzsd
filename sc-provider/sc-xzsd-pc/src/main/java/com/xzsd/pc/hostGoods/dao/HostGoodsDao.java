@@ -13,7 +13,7 @@ public interface HostGoodsDao {
     /**
      * 热门位列表查询
      */
-    List<HostGoodsInfoV> listHostGoodsByPage(HostGoodsInfoF hostGoodsInfoF);
+    List<HostGoodsInfoV> listHostGoodsByPage(HostGoodsInfoF hostGoodsInfoF,int showNum);
     /**
      * 热门位商品新增
      */
@@ -29,7 +29,11 @@ public interface HostGoodsDao {
     /**
      * 展示数量设置
      */
-    int setShowNum(int sort);
+    int setShowNum(int showNum);
+    /**
+     * 获取展示数量
+     */
+    int getShowNum();
     /**
      * 校验该商品是否在热门位
      */

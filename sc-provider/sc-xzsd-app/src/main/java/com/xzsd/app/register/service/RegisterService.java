@@ -1,9 +1,8 @@
-package com.xzsd.app.customer.register.service;
+package com.xzsd.app.register.service;
 
-import com.xzsd.app.customer.register.dao.RegisterDao;
-import com.xzsd.app.customer.register.entity.RegisterInfo;
+import com.xzsd.app.register.dao.RegisterDao;
+import com.xzsd.app.register.entity.RegisterInfo;
 import com.xzsd.app.util.AppResponse;
-import com.xzsd.app.util.AuthorUtil;
 import com.xzsd.app.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,11 +42,12 @@ public class RegisterService {
             return AppResponse.bizError("身份证已注册，请重新输入");
         }
         //生成用户id
-        registerInfo.setUserId(StringUtil.getCommonCode(2));
+        String userId = StringUtil.getCommonCode(2);
+        registerInfo.setUserId(userId);
         int count = registerDao.register(registerInfo);
         if(count == 0){
             return AppResponse.bizError("注册失败，请重新输入");
         }
-        return AppResponse.success("注册成功");
+        return AppResponse.success("注册成功",userId);
     }
 }

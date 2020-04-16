@@ -33,7 +33,7 @@ public class UserController {
      * @return AppResponse
      * @date 2020-3-25
      */
-    @PostMapping("saveUser")
+    @PostMapping("addUser")
     public AppResponse saveUser(UserInfo userInfo){
         try{
             //获取用户Id
@@ -90,7 +90,7 @@ public class UserController {
      * @author weiming
      * @date 2020-3-26
      */
-    @PostMapping("updateUser")
+    @PostMapping("updateUserById")
     public AppResponse updateUser(UserInfo userInfo){
         try{
             //获取用户Id
@@ -111,7 +111,7 @@ public class UserController {
      * @author weiming
      * @date 2020-3-27
      */
-    @RequestMapping(value = "getUserByUserId")
+    @RequestMapping(value = "findUserById")
     public AppResponse getUserByUserId(String userId){
         try{
             return userService.getUserByUserId(userId);

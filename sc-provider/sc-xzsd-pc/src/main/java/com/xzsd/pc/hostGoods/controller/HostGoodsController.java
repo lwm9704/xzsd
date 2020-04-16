@@ -102,4 +102,17 @@ public class HostGoodsController {
             throw e;
         }
     }
+    /**
+     * 修改展示数量
+     */
+    @PostMapping("setShowNUm")
+    public AppResponse setShowNum(int showNum){
+        try{
+            return hostGoodsService.setShowNum(showNum);
+        }catch (Exception e){
+            logger.error("修改展示数量失败",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

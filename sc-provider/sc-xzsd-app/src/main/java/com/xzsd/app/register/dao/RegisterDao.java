@@ -1,8 +1,7 @@
-package com.xzsd.app.customer.register.dao;
+package com.xzsd.app.register.dao;
 
-import com.xzsd.app.customer.register.entity.RegisterInfo;
+import com.xzsd.app.register.entity.RegisterInfo;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface RegisterDao {

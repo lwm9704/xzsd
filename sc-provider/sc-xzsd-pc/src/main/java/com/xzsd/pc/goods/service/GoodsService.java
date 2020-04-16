@@ -34,14 +34,15 @@ public class GoodsService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addGoods(GoodsInfoU goodsInfoU){
-        goodsInfoU.setGoodsId(StringUtil.getCommonCode(3));
+        String goodsId = StringUtil.getCommonCode(3);
+        goodsInfoU.setGoodsId(goodsId);
         goodsInfoU.setIsDelete(0);
         //新增商品
         int count = goodsDao.addGoods(goodsInfoU);
         if(count == 0){
             return AppResponse.bizError("新增失败，请重试！");
         }
-        return AppResponse.success("新增成功！");
+        return AppResponse.success("新增成功！",goodsId);
     }
     /**
      * 删除商品
