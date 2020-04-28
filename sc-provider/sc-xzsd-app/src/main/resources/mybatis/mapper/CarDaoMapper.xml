@@ -21,7 +21,7 @@
 
     <!--创建购物车-->
     <insert id="addCar" parameterType="com.xzsd.app.customer.car.entity.CarInfoU">
-        insert into t_shoppingCar
+        insert into t_shopping_car
         (
         car_id,
         goods_id,
@@ -41,13 +41,17 @@
         #{num},
         #{num}*#{price},
         1,
-        #{userId}
+        #{userId},
+        now(),
+        #{userId},
+        now(),
+        0
         )
     </insert>
 
     <!--修改商品数量-->
     <update id="updateCar" parameterType="com.xzsd.app.customer.car.entity.CarInfoU">
-        update t_shoppingCar
+        update t_shopping_car
         set
         num = #{num},
         price = #{price},
@@ -67,7 +71,7 @@
         b.sales_price,
         b.p_url pUrl
         from
-        t_shoppingCar a left join t_goods b
+        t_shopping_car a left join t_goods b
         on a.goods_id = b.goods_id
         where
         a.is_delete = 0
@@ -75,7 +79,7 @@
 
     <!--购物结算，修改状态-->
     <update id="settlement" parameterType="java.lang.String">
-        update t_shoppingCar
+        update t_shopping_car
         set
         state = 0,
         last_modify_by = #{userId}
@@ -94,7 +98,7 @@
         num,
         total_price
         from
-        t_shoppingCar
+        t_shopping_car
         where
         car_id in
         <foreach collection="listCarId" item="item" index="index" open="(" separator="," close=")">
