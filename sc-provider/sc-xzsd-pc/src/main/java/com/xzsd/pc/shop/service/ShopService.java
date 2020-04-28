@@ -1,11 +1,12 @@
 package com.xzsd.pc.shop.service;
 
-import com.neusoft.util.StringUtil;
 import com.xzsd.pc.shop.dao.ShopDao;
+import com.xzsd.pc.shop.entity.AcctRole;
 import com.xzsd.pc.shop.entity.ShopInfoF;
 import com.xzsd.pc.shop.entity.ShopInfoU;
 import com.xzsd.pc.shop.entity.ShopInfoV;
 import com.xzsd.pc.util.AppResponse;
+import com.xzsd.pc.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +41,16 @@ public class ShopService {
         if(countShop != 0){
             return AppResponse.bizError("该门店信息已存在，请重新输入");
         }
-        //获取用户id
-        shopInfoU.setByUserId(StringUtil.getCommonCode(2));
+        String phone = String.valueOf(shopInfoU.getCall());
+        shopInfoU.setPhone(phone);
+        AcctRole role = shopDao.countRole(shopInfoU);
+        if(role.getRole() != 1){
+            return AppResponse.bizError("输入该编号不是店长角色，请重新输入");
+        }
+        //获取商店id
+        shopInfoU.setShopId(StringUtil.getCommonCode(3));
         //新增门店
-        int count = shopDao.addShopInfo(shopInfoU);
+        int count = shopDao.addShop(shopInfoU);
         if(count == 0){
             return AppResponse.bizError("新增失败，请重试");
         }
@@ -78,6 +85,8 @@ public class ShopService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateShop(ShopInfoU shopInfoU){
         AppResponse appResponse = AppResponse.success("修改成功");
+        String phone = String.valueOf(shopInfoU.getCall());
+        shopInfoU.setPhone(phone);
         int count = shopDao.updateShopInfo(shopInfoU);
         if(count == 0){
             appResponse = AppResponse.versionError("数据有变化，请刷新");
@@ -94,6 +103,9 @@ public class ShopService {
      */
     public AppResponse getShopInfoById(String shopId){
         ShopInfoV shopInfoV = shopDao.getShopInfo(shopId);
+        String str = shopInfoV.getPhone();
+        Long call = Long.parseLong(str);
+        shopInfoV.setCall(call);
         return AppResponse.success("查询成功",shopInfoV);
     }
     /**

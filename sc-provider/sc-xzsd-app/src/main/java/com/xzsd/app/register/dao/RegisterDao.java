@@ -1,5 +1,6 @@
 package com.xzsd.app.register.dao;
 
+import com.xzsd.app.register.entity.RegisterCustomer;
 import com.xzsd.app.register.entity.RegisterInfo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,7 +13,14 @@ public interface RegisterDao {
      * @author weiming
      * @date 2020-4-13
      */
+    /**
+     *用户表
+     */
     int register(RegisterInfo registerInfo);
+    /**
+     * 客户表
+     */
+    int registerCustomer(RegisterCustomer registerCustomer);
     /**
      * 校验用户名是否存在
      * @param userAcct

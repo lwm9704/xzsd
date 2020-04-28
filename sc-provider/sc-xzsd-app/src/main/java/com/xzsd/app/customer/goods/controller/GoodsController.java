@@ -26,6 +26,7 @@ public class GoodsController {
      * @param goodsId
      * @AppResponse
      */
+    @RequestMapping("Goods")
     public AppResponse getGoodsInfo(String goodsId){
         try{
             return goodsService.getGoodsInfo(goodsId);

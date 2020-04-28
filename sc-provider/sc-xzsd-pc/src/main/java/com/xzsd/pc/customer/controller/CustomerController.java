@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @date 2020-4-1
  */
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/user")
 public class CustomerController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
@@ -32,7 +32,7 @@ public class CustomerController {
      * @author weiming
      * @date 2020-4-1
      */
-    @PostMapping("listCustomer")
+    @RequestMapping("listCustomer")
     public AppResponse listCustomer(CustomerInfo customerInfo){
         try{
             return customerService.listCustomer(customerInfo);
@@ -49,7 +49,7 @@ public class CustomerController {
      * @author weiming
      * @date 2020-4-1
      */
-    @PostMapping("getCustomerById")
+    @RequestMapping("getCustomerById")
     public AppResponse getCustomerById(String customerId){
         try{
             return customerService.getCustomerById(customerId);

@@ -6,7 +6,7 @@ public class DriverInfoU {
      */
     private String id;
     /**
-     * 司机编码
+     * 司机编码(用户编码)
      */
     private String driverId;
     /**
@@ -42,10 +42,6 @@ public class DriverInfoU {
      */
     private String countyValue;
     /**
-     * 绑定门店编号
-     */
-    private String bShopId;
-    /**
      * 创建人
      */
     private String creatBy;
@@ -68,14 +64,6 @@ public class DriverInfoU {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getbShopId() {
-        return bShopId;
-    }
-
-    public void setbShopId(String bShopId) {
-        this.bShopId = bShopId;
     }
 
     public String getDriverName() {

@@ -5,9 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.neusoft.util.StringUtil;
 import com.sun.jersey.core.impl.provider.entity.XMLRootObjectProvider;
 import com.xzsd.pc.hostGoods.dao.HostGoodsDao;
-import com.xzsd.pc.hostGoods.entity.HostGoodsInfoF;
-import com.xzsd.pc.hostGoods.entity.HostGoodsInfoU;
-import com.xzsd.pc.hostGoods.entity.HostGoodsInfoV;
+import com.xzsd.pc.hostGoods.entity.*;
 import com.xzsd.pc.util.AppResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,10 +38,9 @@ public class HostGoodsService {
     public AppResponse addHostGoods(HostGoodsInfoU hostGoodsInfoU){
         //校验该商品是否已经在热门位
         int countHost = hostGoodsDao.countHostGoods(hostGoodsInfoU.getGoodsId());
-        if(countHost != 0){
+        if(countHost != 0) {
             return AppResponse.bizError("该商品已经存在,请重新输入");
         }
-        hostGoodsInfoU.setCreatBy(StringUtil.getCommonCode(2));
         //新增商品到热门位
         int count = hostGoodsDao.addHostGoods(hostGoodsInfoU);
         if(count == 0){
@@ -59,9 +56,10 @@ public class HostGoodsService {
      * @date 2020-4-6
      */
     public AppResponse listHostGoods(HostGoodsInfoF hostGoodsInfoF){
-        //获取展示数量
-        int showNUm = hostGoodsDao.getShowNum();
-        List<HostGoodsInfoV> hostGoodsInfoVList = hostGoodsDao.listHostGoodsByPage(hostGoodsInfoF,showNUm);
+        ShowNumInfo showNum = hostGoodsDao.getShowNum();
+        hostGoodsInfoF.setShowNum(showNum.getShowNum());
+        System.out.println(showNum);
+        List<HostGoodsInfoV> hostGoodsInfoVList = hostGoodsDao.listHostGoodsByPage(hostGoodsInfoF);
         return AppResponse.success("查询成功",getPageInfo(hostGoodsInfoVList));
     }
     /**
@@ -76,7 +74,7 @@ public class HostGoodsService {
         List<String> listHostId = Arrays.asList(hostId.split(","));
         AppResponse appResponse = AppResponse.success("删除成功");
         //删除热门位商品
-        int count = hostGoodsDao.deleteHost(hostId,userId);
+        int count = hostGoodsDao.deleteHost(listHostId,userId);
         if(count == 0){
             appResponse = AppResponse.bizError("删除失败，请重试");
         }
@@ -94,7 +92,7 @@ public class HostGoodsService {
         AppResponse appResponse = AppResponse.success("修改成功");
         //校验该商品是否在热门位
         int countHost = hostGoodsDao.countHostGoods(hostGoodsInfoU.getGoodsId());
-        if(countHost != 0) {
+        if(countHost > 1) {
             appResponse = AppResponse.bizError("该商品已经存在热门位，请重新输入");
             return appResponse;
         }
@@ -111,11 +109,25 @@ public class HostGoodsService {
      * @param
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse setShowNum(int showNum){
-        int count = hostGoodsDao.setShowNum(showNum);
+    public AppResponse setShowNum(ShowNumInfo showNumInfo){
+        int count = hostGoodsDao.setShowNum(showNumInfo);
         if(count == 0){
             return AppResponse.versionError("修改展示数量失败");
         }
         return AppResponse.success("修改展示数量成功");
+    }
+    /**
+     * 热门详情
+     */
+    public AppResponse getHostInfo(String hostId){
+        HostInfo hostInfo= hostGoodsDao.getHostInfo(hostId);
+        return AppResponse.success("查询成功",hostInfo);
+    }
+    /**
+     * 获取展示数量
+     */
+    public AppResponse getHotNum(){
+        ShowNumInfo showNumInfo = hostGoodsDao.getShowNum();
+        return AppResponse.success("查询展示数量成功",showNumInfo);
     }
 }

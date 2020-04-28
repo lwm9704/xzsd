@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.demo.shop.dao.ShopDao">
+<mapper namespace="com.xzsd.pc.shop.dao.ShopDao">
 
     <!--检验该门店是否已经存在-->
     <select id="countShop" parameterType="com.xzsd.pc.shop.entity.ShopInfoU" resultType="int">
         select count(shop_name)
         from t_shop
-        where shop_nam = #{shopName}
+        where shop_name = #{shopName}
         and is_delete = 0
     </select>
 
     <!--新增门店-->
     <insert id="addShop" parameterType="com.xzsd.pc.shop.entity.ShopInfoU">
         insert into t_shop
-        (shop_name,
+        (shop_id,
+        shop_name,
         phone,
         shoppower_id,
         license,
@@ -21,6 +22,7 @@
         city_value,
         county_value,
         address,
+        invitation_code,
         is_delete,
         creat_by,
         creat_time,
@@ -28,7 +30,8 @@
         modify_time,
         version)
         value
-        (#{shopName},
+        (#{shopId},
+        #{shopName},
         #{phone},
         #{shoppowerId},
         #{license},
@@ -36,6 +39,7 @@
         #{cityValue},
         #{countyValue},
         #{address},
+        #{invitationCode},
         0,
         #{byUserId},
         now(),
@@ -45,7 +49,7 @@
     </insert>
 
     <!--修改门店信息-->
-    <update id="updateShop" parameterType="com.xzsd.pc.shop.entity.ShopInfoU">
+    <update id="updateShopInfo" parameterType="com.xzsd.pc.shop.entity.ShopInfoU">
         update t_shop
         set
             shop_name = #{shopName},
@@ -60,68 +64,89 @@
             modify_time = now(),
             version = version + 1
             where shop_id = #{shopId}
-            and version = #{version}
     </update>
 
     <!--删除门店信息-->
-    <update id="deleteShop" parameterType="com.xzsd.pc.shop.entity.ShopInfoF">
+    <update id="deleteShopId" parameterType="java.lang.String">
         update t_shop
         set
         is_delete = 1,
-        last_modify_by = #{byUserId},
+        last_modify_by = #{userId},
         modify_time = now(),
         version = version + 1
         where
+        shop_id in
         <foreach item="item" index="index" collection="listId" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>
 
     <!--查询门店信息列表-->
-    <select id="listShop" parameterType="com.xzsd.pc.shop.entity.ShopInfoF" resultType="com.xzsd.pc.shop.entity.ShopInfoV">
+    <select id="listShopInfoByPage" parameterType="com.xzsd.pc.shop.entity.ShopInfoF" resultType="com.xzsd.pc.shop.entity.ShopInfoV">
         select
-        shop_id shopId,
-        shop_name shopName,
-        phone,
-        address,
-        shoppower_id shppowerId,
-        invitation_id invitationId,
-        user_acct userAcct
+        a.shop_id shopId,
+        a.shop_name shopName,
+        a.phone,
+        a.address,
+        a.shoppower_id shppowerId,
+        a.invitation_code invitationCode,
+        b.user_acct userAcct,
+        b.user_name shoppowerName
         from t_shop as a left join t_sys_user as b
         on a.shoppower_id = b.user_id
         where
-        is_delete = 0
+        a.is_delete = 0
         <if test="shopId != null and shopId != ''">
-            and shop_id = #{shopId}
+            and a.shop_id like concat('%',#{shopId},'%')
         </if>
         <if test="shopName != null and shopName != ''">
-            and shop_name = #{shopName}
+            and a.shop_name like concat('%',#{shopName},'%')
+        </if>
+        <if test="shoppowerName != null and shoppowerName != ''">
+            and b.user_name like concat('%',#{shoppowerName},'%')
         </if>
         <if test="provinceValue != null and provinceValue != ''">
-            and province_value = #{provinceValue}
+            and a.province_value = #{provinceValue}
         </if>
         <if test="cityValue != null and cityValue != ''">
-            and city_value = #{cityValue}
+            and a.city_value = #{cityValue}
         </if>
         <if test="countyValue != null and countyValue != ''">
-            and county_value = #{countyValue}
+            and a.county_value = #{countyValue}
         </if>
     </select>
 
     <!--查询门店详情-->
-    <select id="getShopInfoById" parameterType="java.lang.String" resultType="com.xzsd.pc.shop.entity.ShopInfoV">
+    <select id="getShopInfo" parameterType="java.lang.String" resultType="com.xzsd.pc.shop.entity.ShopInfoV">
         select
-        shop_id shopId,
-        shop_name shopName,
-        phone,
-        address,
-        shoppower_id shppowerId,
-        invitation_id invitationId,
-        user_acct userAcct
+        a.shop_id shopId,
+        a.shop_name shopName,
+        a.phone phone,
+        a.address,
+        a.shoppower_id shppowerId,
+        a.invitation_code invitationCode,
+        a.license license,
+        a.province_value provinceValue,
+        a.city_value cityValue,
+        a.county_value countyValue,
+        b.user_id shoppowerId,
+        b.user_acct userAcct
         from t_shop as a left join t_sys_user as b
         on a.shoppower_id = b.user_id
         where
-        is_delete = 0
+        a.is_delete = 0
         and shop_id = #{shopId}
+    </select>
+
+    <!--校验账号角色-->
+    <select id="countRole" parameterType="com.xzsd.pc.shop.entity.ShopInfoU" resultType="com.xzsd.pc.shop.entity.AcctRole">
+        select
+        role
+        from
+        t_sys_user
+        where
+        user_id = #{shoppowerId}
+        and
+        is_delete = 0
     </select>
 </mapper>

@@ -2,6 +2,10 @@ package com.xzsd.pc.shop.entity;
 
 public class ShopInfoU {
     /**
+     * 门店编号
+     */
+    private String shopId;
+    /**
      * 门店名称
      */
     private String shopName;
@@ -43,12 +47,16 @@ public class ShopInfoU {
      */
     private int version;
 
-    public int getVersion() {
-        return version;
+    private String invitationCode;
+
+    private Long call;
+
+    public String getShopId() {
+        return shopId;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 
     public String getShopName() {
@@ -121,5 +129,29 @@ public class ShopInfoU {
 
     public void setByUserId(String byUserId) {
         this.byUserId = byUserId;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public String getInvitationCode() {
+        return invitationCode;
+    }
+
+    public void setInvitationCode(String invitationCode) {
+        this.invitationCode = invitationCode;
+    }
+
+    public Long getCall() {
+        return call;
+    }
+
+    public void setCall(Long call) {
+        this.call = call;
     }
 }

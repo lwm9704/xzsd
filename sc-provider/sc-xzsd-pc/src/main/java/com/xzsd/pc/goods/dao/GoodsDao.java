@@ -3,6 +3,7 @@ package com.xzsd.pc.goods.dao;
 import com.xzsd.pc.goods.entity.GoodsInfoF;
 import com.xzsd.pc.goods.entity.GoodsInfoU;
 import com.xzsd.pc.goods.entity.GoodsInfoV;
+import com.xzsd.pc.goods.entity.GoodsState;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,11 +25,11 @@ public interface GoodsDao {
     int addGoods(GoodsInfoU goodsInfoU);
     /**
      * 删除商品
-     * @param listGId 选中的商品编号集合
+     * @param listId 选中的商品编号集合
      * @param  gUserId 更新人
      * @return
      */
-    int deleteGoods(List<String> listGId, @Param("gUserId") String gUserId);
+    int deleteGoods(@Param("listId") List<String> listId, @Param("gUserId") String gUserId);
     /**
      * 修改商品信息
      * @param goodsInfo
@@ -45,5 +46,16 @@ public interface GoodsDao {
      * @date 2020-4-12
      */
     List<GoodsInfoV> listGoodsByPage(GoodsInfoF goodsInfoF);
-
+    /**
+     * 修改和商品状态
+     */
+    int updateState(GoodsState goodsState);
+    /**
+     * 查询商品详情
+     */
+    GoodsInfoU getGoodsInfo(String goodsId);
+    /**
+     * 新增商品时对应二级分类增加
+     */
+    int addSecondSort(@Param("sortId") String sortId,@Param("userId") String userId);
 }

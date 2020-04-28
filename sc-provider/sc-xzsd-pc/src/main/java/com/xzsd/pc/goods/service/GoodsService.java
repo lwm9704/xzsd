@@ -1,15 +1,18 @@
 package com.xzsd.pc.goods.service;
 
+import com.xzsd.pc.cos.entity.MgInfo;
 import com.xzsd.pc.goods.dao.GoodsDao;
 import com.xzsd.pc.goods.entity.GoodsInfoF;
 import com.xzsd.pc.goods.entity.GoodsInfoU;
 import com.xzsd.pc.goods.entity.GoodsInfoV;
+import com.xzsd.pc.goods.entity.GoodsState;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,10 +42,12 @@ public class GoodsService {
         goodsInfoU.setIsDelete(0);
         //新增商品
         int count = goodsDao.addGoods(goodsInfoU);
-        if(count == 0){
+        //对应分类的数量加1
+        int addSecodSort = goodsDao.addSecondSort(goodsInfoU.getSecondSortId(),goodsInfoU.getCreatBy());
+        if(count == 0 || addSecodSort == 0){
             return AppResponse.bizError("新增失败，请重试！");
         }
-        return AppResponse.success("新增成功！",goodsId);
+        return AppResponse.success("新增成功！");
     }
     /**
      * 删除商品
@@ -96,5 +101,25 @@ public class GoodsService {
     public AppResponse listGoods(GoodsInfoF goodsInfoF){
         List<GoodsInfoV> goodsInfoVList = goodsDao.listGoodsByPage(goodsInfoF);
         return AppResponse.success("查询成功",getPageInfo(goodsInfoVList));
+    }
+    /**
+     * 修改商品状态
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public AppResponse updateState(GoodsState goodsState){
+        List<String> listId = Arrays.asList(goodsState.getGoodsId().split(","));
+        goodsState.setListId(listId);
+        int count = goodsDao.updateState(goodsState);
+        if(count == 0){
+            return AppResponse.bizError("修改商品状态失败");
+        }
+        return AppResponse.success("修改商品状态成功");
+    }
+    /**
+     * 查询商品详情
+     */
+    public AppResponse getGoodsInfo(String goodsId){
+        GoodsInfoU goodsInfoU = goodsDao.getGoodsInfo(goodsId);
+        return AppResponse.success("查询商品详情成功",goodsInfoU);
     }
 }

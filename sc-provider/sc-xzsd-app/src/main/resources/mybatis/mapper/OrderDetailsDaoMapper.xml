@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsd.app.customer.order.dao.OrderDetailsDao">
+    <resultMap id="OrderDetails" type="com.xzsd.app.customer.order.entity.OrderDetails">
+        <id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="order_state" property="orderState" jdbcType="INTEGER"/>
+        <result column="creat_time" property="creatTime" jdbcType="DATE"/>
+        <association property="goods" javaType="com.xzsd.app.customer.order.entity.Goods">
+            <id column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+            <result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+            <result column="introduce" property="introduce" jdbcType="VARCHAR"/>
+            <result column="sales_price" property="salesPrice" jdbcType="DOUBLE"/>
+            <result column="num" property="num" jdbcType="INTEGER"/>
+            <result column="price" property="price" jdbcType="DOUBLE"/>
+            <result column="p_url" property="pUrl" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!--查询订单详情-->
+    <select id="getGoodsDetails" parameterType="java.lang.String" resultMap="OrderDetails">
+        select
+        b.order_id,
+        b.order_state,
+        b.creat_time,
+        d.goods_id,
+        d.introduce,
+        d.sales_price,
+        d.p_url,
+        a.num,
+        a.price
+        from
+        t_orderDetails a,
+        t_order b,
+        t_goods d
+        where
+        a.order_id = b.order_id
+        and
+        a.goods_id = d.goods_id
+        and
+        a.order_id = #{orderId}
+    </select>
+
+    <!--新增订单详情-->
+    <insert id="addOrderDetails" parameterType="com.xzsd.app.customer.order.entity.OrderDetailsU">
+        insert into t_order_details
+        (order_id,
+        goods_id,
+        num,
+        price,
+        creat_by,
+        creat_time,
+        is_delete,
+        version)
+        value
+        (#{orderId},
+        #{goodsId},
+        #{num},
+        #{price},
+        #{userId},
+        now(),
+        0,
+        0)
+    </insert>
+
+    <!--完成订单-->
+    <update id="deleteOrderDetails" parameterType="com.xzsd.app.customer.order.entity.OrderDetailsU">
+        update t_order_details
+        set
+        is_delete = 1,
+        last_modify_by = #{userId},
+        modify_time = now(),
+        where
+        order_id = #{orderId}
+    </update>
+</mapper>

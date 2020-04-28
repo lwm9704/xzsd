@@ -69,6 +69,14 @@ public class UserInfo {
      */
     private int version;
 
+    private String pKey;
+
+    private String pUrl;
+    /**
+     * 手机号
+     */
+    private Long call;
+
     public String getUserId() {
         return userId;
     }
@@ -187,5 +195,29 @@ public class UserInfo {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getpKey() {
+        return pKey;
+    }
+
+    public void setpKey(String pKey) {
+        this.pKey = pKey;
+    }
+
+    public String getpUrl() {
+        return pUrl;
+    }
+
+    public void setpUrl(String pUrl) {
+        this.pUrl = pUrl;
+    }
+
+    public Long getCall() {
+        return call;
+    }
+
+    public void setCall(Long call) {
+        this.call = call;
     }
 }

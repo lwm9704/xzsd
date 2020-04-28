@@ -21,8 +21,6 @@ public class RotaCotroller {
 
    private static final Logger logger = LoggerFactory.getLogger(RotaCotroller.class);
 
-   private static final int NUM = 4;//轮播图数量
-
     /**
      * 获取轮播图信息
      * @param
@@ -31,7 +29,7 @@ public class RotaCotroller {
     @RequestMapping("findRotatPicture")
     public AppResponse getRotaList(){
         try{
-            return rotaService.getRotaList(NUM);
+            return rotaService.getRotaList();
         }catch (Exception e){
             logger.error("查询轮播图异常",e);
             System.out.println(e.toString());

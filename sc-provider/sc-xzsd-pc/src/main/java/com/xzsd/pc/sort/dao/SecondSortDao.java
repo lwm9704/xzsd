@@ -1,6 +1,9 @@
 package com.xzsd.pc.sort.dao;
 
 import com.xzsd.pc.sort.entity.SecondSortInfo;
+import com.xzsd.pc.sort.entity.SortInfo;
+import com.xzsd.pc.sort.entity.SortInfoA;
+import com.xzsd.pc.sort.entity.SortInfoU;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,47 +19,54 @@ public interface SecondSortDao {
 
     /**
      *统计是否有重复的类
-     * @param secondSortInfo
+     * @param sortInfoA
      * @return
      */
-    int countSecondSort(SecondSortInfo secondSortInfo);
+    int countSecondSort(SortInfoA sortInfoA);
     /**
      * 新增分类
-     * @param secondSortInfo
+     * @param sortInfoA
      * @return
      */
-    int addSecondSort(SecondSortInfo secondSortInfo);
+    int addSecondSort(SortInfoA sortInfoA);
     /**
      * 获取分类信息
      * @param secondSortInfo
      * @return 所有二级分类信息
      */
-    List<SecondSortInfo> listSecondSort(SecondSortInfo secondSortInfo);
+    List<SecondSortInfo> listSecondSortByPage(SecondSortInfo secondSortInfo);
     /**
      * 修改分类信息
-     * @param secondSortInfo
+     * @param sortInfoU
      * @return 修改结果
      */
-    int updateSecondSort(SecondSortInfo secondSortInfo);
+    int updateSecondSort(SortInfoU sortInfoU);
     /**
      * 删除分类信息
-     * @param secondSortId 选中的分类编号
-     * @param userId 更新人
+     * @param sortInfoU
      * @return 修改结果
      */
-    int deleteSecondSort(@Param("secondSortId") String secondSortId, @Param("userId") String userId);
+    int deleteSecondSort(SortInfoU sortInfoU);
     /**
      * 查询分类详情
-     * @param secondSortId
+     * @param
      * @return sceondSortInfo
      */
-    SecondSortInfo getSecondSortInfo(@Param("secondSortId") String secondSortId);
+    SortInfo getSecondSortInfo(SortInfoA sortInfoA);
     /**
-     * 传递二级分类个数参数
-     * @param secondSortInfo
+     * 增加在一级分类表下二级分类个数
+     * @param sortInfoA
      * @return
      * @author weiming
      * @date 2020-3-29
      */
-    int transmitFirstSort(SecondSortInfo secondSortInfo);
+    int transmitFirstSort(SortInfoA sortInfoA);
+    /**
+     * 删除二级分类时，减少一级分类下二级分类的个数
+     */
+    int transmitDFirstSort(SortInfoU sortInfoU);
+    /**
+     * 校验分类下是否有商品
+     */
+    int countGoodsNum(String secondSortId);
 }

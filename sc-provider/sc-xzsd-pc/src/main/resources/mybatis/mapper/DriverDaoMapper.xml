@@ -4,7 +4,7 @@
 
     <!--校验该司机信息已经存在-->
     <select id="countDriver" parameterType="java.lang.String" resultType="int">
-        select count(driver_name)
+        select count(driver_acct)
         from t_driver
         where driver_acct = #{driverAcct}
         and is_delete = 0
@@ -13,16 +13,12 @@
     <!--新增司机信息-->
     <insert id="addDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfoU">
         insert into t_driver
-        (id,
-        driver_name,
-        phone,
+        (
+        id,
         driver_acct,
-        password,
-        id_card,
         province_value,
         city_value,
         county_value,
-        b_shop_id,
         is_delete,
         creat_by,
         creat_time,
@@ -30,20 +26,16 @@
         modify_time,
         version)
         value
-        (#{id},
-        #{driverName},
-        #{phone},
+        (
+        #{id},
         #{driverAcct},
-        #{password},
-        #{idCard},
         #{provinceValue},
         #{cityValue},
         #{countyValue},
-        #{b_shop_id},
         0,
         #{creatBy},
         now(),
-        #{lastModifyBy}，
+        #{lastModifyBy},
         now(),
         0)
     </insert>
@@ -52,15 +44,10 @@
     <update id="updateDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfoU">
         update t_driver
         set
-        driver_name = #{driverName},
-        phone = #{phone},
         driver_acct = #{driverAcct},
-        password = #{password},
-        id_card = {idCard},
         province_value = #{provinceValue},
         city_value = #{cityValue},
         county_value = #{countyValue},
-        b_shop_id = #{bShopId},
         last_modify_by = #{lastModifyBy},
         modify_time = now(),
         version = version + 1
@@ -70,58 +57,86 @@
     </update>
 
     <!--删除司机信息-->
-    <update id="deleteDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfoU">
+    <update id="deleteDriver" parameterType="java.lang.String">
         update t_driver
         set
-        is_delete = ,
-        last_modify_by = #{lastModifyBy},
+        is_delete = 1,
+        last_modify_by = #{userId},
         modify_time = now(),
         version = version + 1
-        where driver_id in
+        where id in
         <foreach item="item" index="index" collection="listId" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>
 
     <!--查询司机信息列表-->
-    <select id="listDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfoF" resultType="com.xzsd.pc.driver.entity.DriverInfoV">
+    <select id="listDriverByPage" parameterType="com.xzsd.pc.driver.entity.DriverInfoF" resultType="com.xzsd.pc.driver.entity.DriverInfoV">
         select
-        b.driver_id driverId,
+        a.id id,
+        b.user_id driverId,
         b.user_name driverName,
-        phone,
+        b.phone,
         b.id_card idCard,
         b.user_acct driverAcct
         from t_driver as a inner join t_sys_user as b
-        on driver_id = user_id
-        where is_delete = 0
-        <if test="driverId != null driverId != ''">
-            and driver_id = #{driverId}
+        on driver_acct = user_acct
+        where a.is_delete = 0
+        <if test="driverId != null and driverId != ''">
+            and b.user_id like concat('%',#{driverId},'%')
         </if>
         <if test="driverName != null and driverName != ''">
-            and driver_name = #{driverName}
+            and b.user_name like concat('%',#{driverName},'%')
         </if>
         <if test="provinceValue != null and provinceValue != ''">
-            and province_value = #{provinceValue}
+            and a.province_value = #{provinceValue}
         </if>
         <if test="cityValue != null and cityValue != ''">
-            and city_value = #{cityValue}
+            and a.city_value = #{cityValue}
         </if>
         <if test="countyValue != null and countyValue != ''">
-            and county_value = #{countyValue}
+            and a.county_value = #{countyValue}
         </if>
     </select>
 
     <!--查询司机详情-->
     <select id="getDriverById" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.DriverInfoV">
         select
+        a.id id,
         b.user_id driverId,
         b.user_name driverName,
-        phone,
+        b.phone phone,
         b.id_card idCard,
         b.user_acct driverAcct
         from t_driver as a inner join t_sys_user as b
-        on driver_id = user_id
-        where is_delete = 0
-        and id = #{id}
+        on driver_acct = user_acct
+        where a.is_delete = 0
+        and a.id = #{id}
+    </select>
+
+    <!--校验账号角色-->
+    <select id="countRole" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.AcctRole">
+        select
+        role role
+        from
+        t_sys_user
+        where
+        user_acct = #{driverAcct}
+        and
+        is_delete = 0
+    </select>
+
+    <!--获取司机详情-->
+    <select id="getDriver" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.DriverInfoU">
+        select
+        a.driver_acct driverAcct,
+        province_value provinceValue,
+        city_value cityValue,
+        county_value countyValue
+        from
+        t_driver a left join t_sys_user b
+        on a.driver_acct = b.user_acct
+        where
+        id = #{id}
     </select>
 </mapper>

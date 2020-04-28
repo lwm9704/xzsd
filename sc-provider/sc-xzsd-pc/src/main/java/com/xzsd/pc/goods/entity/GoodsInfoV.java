@@ -4,6 +4,10 @@ import java.util.Date;
 
 public class GoodsInfoV {
     /**
+     * 商品编号
+     */
+    private String goodsId;
+    /**
      * 商品名称
      */
     private String goodsName;
@@ -18,15 +22,23 @@ public class GoodsInfoV {
     /**
      * 销售量
      */
-    private int saleVolume;
+    private int salesVolume;
+    /**
+     * 一级分类编号
+     */
+    private String firstSortId;
     /**
      * 一级分类名称
      */
-    private String firstSort;
+    private String firstSortName;
+    /**
+     * 二级分类编号
+     */
+    private String secondSortId;
     /**
      * 二级分类名称
      */
-    private String secondSort;
+    private String secondSortName;
     /**
      * 广告词
      */
@@ -38,7 +50,7 @@ public class GoodsInfoV {
     /**
      * 商品状态 1上架0下架
      */
-    private int goodsState;
+    private int state;
     /**
      * 上架时间
      */
@@ -48,13 +60,9 @@ public class GoodsInfoV {
      */
     private int browse;
     /**
-     * 商家编码
-     */
-    private String businessId;
-    /**
      * 商家名称
      */
-    private  String businessName;
+    private String businessName;
     /**
      * 库存
      */
@@ -63,6 +71,14 @@ public class GoodsInfoV {
      * 书号
      */
     private String isbn;
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
 
     public String getGoodsName() {
         return goodsName;
@@ -88,28 +104,44 @@ public class GoodsInfoV {
         this.salesPrice = salesPrice;
     }
 
-    public int getSaleVolume() {
-        return saleVolume;
+    public int getSalesVolume() {
+        return salesVolume;
     }
 
-    public void setSaleVolume(int saleVolume) {
-        this.saleVolume = saleVolume;
+    public void setSalesVolume(int salesVolume) {
+        this.salesVolume = salesVolume;
     }
 
-    public String getFirstSort() {
-        return firstSort;
+    public String getFirstSortId() {
+        return firstSortId;
     }
 
-    public void setFirstSort(String firstSort) {
-        this.firstSort = firstSort;
+    public void setFirstSortId(String firstSortId) {
+        this.firstSortId = firstSortId;
     }
 
-    public String getSecondSort() {
-        return secondSort;
+    public String getFirstSortName() {
+        return firstSortName;
     }
 
-    public void setSecondSort(String secondSort) {
-        this.secondSort = secondSort;
+    public void setFirstSortName(String firstSortName) {
+        this.firstSortName = firstSortName;
+    }
+
+    public String getSecondSortId() {
+        return secondSortId;
+    }
+
+    public void setSecondSortId(String secondSortId) {
+        this.secondSortId = secondSortId;
+    }
+
+    public String getSecondSortName() {
+        return secondSortName;
+    }
+
+    public void setSecondSortName(String secondSortName) {
+        this.secondSortName = secondSortName;
     }
 
     public String getAdvert() {
@@ -128,12 +160,12 @@ public class GoodsInfoV {
         this.introduce = introduce;
     }
 
-    public int getGoodsState() {
-        return goodsState;
+    public int getState() {
+        return state;
     }
 
-    public void setGoodsState(int goodsState) {
-        this.goodsState = goodsState;
+    public void setState(int state) {
+        this.state = state;
     }
 
     public Date getShelfTime() {
@@ -150,14 +182,6 @@ public class GoodsInfoV {
 
     public void setBrowse(int browse) {
         this.browse = browse;
-    }
-
-    public String getBusinessId() {
-        return businessId;
-    }
-
-    public void setBusinessId(String businessId) {
-        this.businessId = businessId;
     }
 
     public String getBusinessName() {

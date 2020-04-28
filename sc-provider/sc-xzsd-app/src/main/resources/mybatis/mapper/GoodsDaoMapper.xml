@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.customer.goods.dao.GoodsDao">
+    <!--获取商品详情-->
+    <select id="getGoodsInfo" parameterType="java.lang.String" resultType="com.xzsd.app.customer.goods.entity.GoodsInfoV">
+        select
+        goods_id goodsId,
+        goods_name goodsName,
+        introduce,
+        set_price setPrice,
+        sales_price salesPrice,
+        p_url pUrl
+        from
+        t_goods
+        where
+        goods_id = #{goodsId}
+        and
+        is_delete = 0
+    </select>
+</mapper>

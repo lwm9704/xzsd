@@ -2,6 +2,7 @@ package com.xzsd.pc.driver.service;
 
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.driver.dao.DriverDao;
+import com.xzsd.pc.driver.entity.AcctRole;
 import com.xzsd.pc.driver.entity.DriverInfoF;
 import com.xzsd.pc.driver.entity.DriverInfoU;
 import com.xzsd.pc.driver.entity.DriverInfoV;
@@ -37,10 +38,13 @@ public class DriverService {
     public AppResponse addDriver(DriverInfoU driverInfoU){
         //校验该司机是否已经存在（BY Acct）
         int countDriver = driverDao.countDriver(driverInfoU.getDriverAcct());
+        AcctRole role = driverDao.countRole(driverInfoU.getDriverAcct());
         if(countDriver != 0){
             return AppResponse.bizError("该司机信息已经存在，请重新输入");
         }
-        driverInfoU.setCreatBy(StringUtil.getCommonCode(2));
+        if(role.getRole() != 2){
+            return AppResponse.bizError("绑定该账户不是司机角色账号，请重新输入");
+        }
         driverInfoU.setId(StringUtil.getCommonCode(1));
         //新增司机
         int count = driverDao.addDriver(driverInfoU);
@@ -61,7 +65,7 @@ public class DriverService {
         List<String> listId = Arrays.asList(id.split(","));
         AppResponse appResponse = AppResponse.success("删除成功");
         //删除司机信息
-        int count = driverDao.deletedriver(listId,userId);
+        int count = driverDao.deleteDriver(listId,userId);
         if(count == 0){
             appResponse = AppResponse.bizError("删除失败，请重试");
         }
@@ -77,6 +81,14 @@ public class DriverService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateDriver(DriverInfoU driverInfoU){
         AppResponse appResponse = AppResponse.success("修改成功");
+        AcctRole role = driverDao.countRole(driverInfoU.getDriverAcct());
+        if(role.getRole() != 2){
+            return AppResponse.bizError("绑定该账户不是司机角色账号，请重新输入");
+        }
+        int countDriver = driverDao.countDriver(driverInfoU.getDriverAcct());
+        if(countDriver != 0 ){
+            return AppResponse.bizError("账户已绑定，请重新输入");
+        }
         int count = driverDao.updateDriver(driverInfoU);
         if(count == 0){
             return appResponse = AppResponse.versionError("数据有变化，请刷新");
@@ -96,13 +108,20 @@ public class DriverService {
     }
     /**
      * 查询司机详情
-     * @param driverId
+     * @param id
      * @return
      * @author weiming
      * @date 2020-4-8
      */
-    public AppResponse getDriverById(String driverId){
-        DriverInfoV driverInfoV = driverDao.getDriverById(driverId);
+    public AppResponse getDriverById(String id){
+        DriverInfoV driverInfoV = driverDao.getDriverById(id);
         return AppResponse.success("查询成功",driverInfoV);
+    }
+    /**
+     * 获取司机详情
+     */
+    public AppResponse getDriver(String id){
+        DriverInfoU driverInfoU = driverDao.getDriver(id);
+        return AppResponse.success("查询成功",driverInfoU);
     }
 }

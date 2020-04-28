@@ -3,6 +3,7 @@ package com.xzsd.pc.hostGoods.entity;
 import java.util.Date;
 
 public class HostGoodsInfoU {
+    private String hostId;
     /**
      * 商品编号
      */
@@ -20,21 +21,21 @@ public class HostGoodsInfoU {
      */
     private String creatBy;
     /**
-     * 创建时间
-     */
-    private Date creatTime;
-    /**
      * 更新人
      */
     private String lastModifyBy;
     /**
-     * 更新时间
-     */
-    private Date mpdifyTime;
-    /**
      * 版本号
      */
     private int version;
+
+    public String getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
 
     public String getGoodsId() {
         return goodsId;
@@ -68,13 +69,6 @@ public class HostGoodsInfoU {
         this.creatBy = creatBy;
     }
 
-    public Date getCreatTime() {
-        return creatTime;
-    }
-
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
-    }
 
     public String getLastModifyBy() {
         return lastModifyBy;
@@ -84,13 +78,6 @@ public class HostGoodsInfoU {
         this.lastModifyBy = lastModifyBy;
     }
 
-    public Date getMpdifyTime() {
-        return mpdifyTime;
-    }
-
-    public void setMpdifyTime(Date mpdifyTime) {
-        this.mpdifyTime = mpdifyTime;
-    }
 
     public int getVersion() {
         return version;

@@ -10,7 +10,7 @@ public class OrderInfoF {
     /**
      * 下单人
      */
-    private String userId;
+    private String orderName;
     /**
      * 手机号
      */
@@ -18,41 +18,15 @@ public class OrderInfoF {
     /**
      * 订单状态
      */
-    private int state;
+    private int orderState;
     /**
      * 最早付款时间
      */
-    private Date minTime;
+    private String minTime;
     /**
      * 昨晚付款时间
      */
-    private Date maxTime;
-
-    /**
-     *页数
-     */
-    private int pageSize;
-
-    /**
-     *页码
-     */
-    private int pageNum;
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
+    private String  maxTime;
 
     public String getOrderId() {
         return orderId;
@@ -62,12 +36,12 @@ public class OrderInfoF {
         this.orderId = orderId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getOrderName() {
+        return orderName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
     }
 
     public String getPhone() {
@@ -78,27 +52,27 @@ public class OrderInfoF {
         this.phone = phone;
     }
 
-    public int getState() {
-        return state;
+    public int getOrderState() {
+        return orderState;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setOrderState(int orderState) {
+        this.orderState = orderState;
     }
 
-    public Date getMinTime() {
+    public String getMinTime() {
         return minTime;
     }
 
-    public void setMinTime(Date minTime) {
+    public void setMinTime(String minTime) {
         this.minTime = minTime;
     }
 
-    public Date getMaxTime() {
+    public String getMaxTime() {
         return maxTime;
     }
 
-    public void setMaxTime(Date maxTime) {
+    public void setMaxTime(String maxTime) {
         this.maxTime = maxTime;
     }
 }

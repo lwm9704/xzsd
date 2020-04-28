@@ -1,8 +1,10 @@
 package com.xzsd.app.register.service;
 
 import com.xzsd.app.register.dao.RegisterDao;
+import com.xzsd.app.register.entity.RegisterCustomer;
 import com.xzsd.app.register.entity.RegisterInfo;
 import com.xzsd.app.util.AppResponse;
+import com.xzsd.app.util.PasswordUtils;
 import com.xzsd.app.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +46,14 @@ public class RegisterService {
         //生成用户id
         String userId = StringUtil.getCommonCode(2);
         registerInfo.setUserId(userId);
+        String pwd = PasswordUtils.generatePassword(registerInfo.getPassword());
+        registerInfo.setPassword(pwd);
         int count = registerDao.register(registerInfo);
-        if(count == 0){
+        RegisterCustomer registerCustomer = new RegisterCustomer();
+        registerCustomer.setUserId(userId);
+        registerCustomer.setInvitationCode(registerInfo.getInvitationCode());
+        int countCustomer = registerDao.registerCustomer(registerCustomer);
+        if(count == 0 || countCustomer == 0){
             return AppResponse.bizError("注册失败，请重新输入");
         }
         return AppResponse.success("注册成功",userId);

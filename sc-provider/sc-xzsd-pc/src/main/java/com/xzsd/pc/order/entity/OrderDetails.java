@@ -1,16 +1,18 @@
 package com.xzsd.pc.order.entity;
 
-public class OrderInfoD {
+import java.util.Date;
+
+public class OrderDetails {
     /**
      * 用户id
      */
     private String userId;
     /**
-     * 订单编号
+     * 订单编码
      */
     private String orderId;
     /**
-     * 商品编号
+     * 商品编码
      */
     private String goodsId;
     /**
@@ -20,7 +22,7 @@ public class OrderInfoD {
     /**
      * 购买数量
      */
-    private int payNum;
+    private int goodsNum;
     /**
      * 总金额
      */
@@ -66,12 +68,12 @@ public class OrderInfoD {
         this.goodsName = goodsName;
     }
 
-    public int getPayNum() {
-        return payNum;
+    public int getGoodsNum() {
+        return goodsNum;
     }
 
-    public void setPayNum(int payNum) {
-        this.payNum = payNum;
+    public void setGoodsNum(int goodsNum) {
+        this.goodsNum = goodsNum;
     }
 
     public double getTotalPrice() {

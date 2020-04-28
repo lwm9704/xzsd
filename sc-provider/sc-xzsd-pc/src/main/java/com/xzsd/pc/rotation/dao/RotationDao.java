@@ -26,7 +26,7 @@ public interface RotationDao {
      * @param userId
      * @return
      */
-    int deleteMg(List<String> listId,@Param("userId") String userId);
+    int deleteMg(@Param("listId") List<String> listId,@Param("userId") String userId);
     /**
      * 修改轮播图状态
      * @param rotationInfoU
@@ -41,13 +41,13 @@ public interface RotationDao {
     int countRotation(String rotationId);
     /**
      * 查询轮播图列表
-     * @param roatationInfoU
+     * @param
      * @return
      */
-    List<RotationInfoV> listRotationByPage(RotationInfoU roatationInfoU);
+    List<RotationInfoV> listRotationByPage(RotationInfoU rotationInfoU);
     /**
      * 排序校验
      * @param sort
      */
-    int countSort(int sort);
+    int addCountSort(int sort);
 }

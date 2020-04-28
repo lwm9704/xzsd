@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/address")
+@RequestMapping("/user")
 public class AddressController {
     @Resource
     private AddressService addressService;
@@ -24,7 +24,7 @@ public class AddressController {
      * @author weiming
      * @date 2020-4-11
      */
-    @RequestMapping("province")
+    @RequestMapping("listProvince")
     public AppResponse listProvince(){
         try{
             return addressService.listProvince();
@@ -39,7 +39,7 @@ public class AddressController {
      * @author weiming
      * @date 2020-4-11
      */
-    @RequestMapping("city")
+    @RequestMapping("listCity")
     public AppResponse listCity(CityInfo cityInfo){
         try{
             return addressService.listCity(cityInfo);
@@ -54,7 +54,7 @@ public class AddressController {
      * @author weiming
      * @date 2020-4-11
      */
-    @RequestMapping("county")
+    @RequestMapping("listCounty")
     public AppResponse listCounty(CountyInfo countyInfo){
         try{
             return addressService.listCounty(countyInfo);

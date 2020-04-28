@@ -1,5 +1,6 @@
 package com.xzsd.pc.order.controller;
 
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.pc.order.entity.OrderInfoF;
 import com.xzsd.pc.order.service.OrderService;
 import com.xzsd.pc.util.AppResponse;
@@ -17,7 +18,7 @@ import javax.annotation.Resource;
  * @date 2020-4-5
  */
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/user")
 public class OrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -32,7 +33,7 @@ public class OrderController {
      * @author weiming
      * @date 2020-4-5
      */
-    @PostMapping("listOrder")
+    @RequestMapping("listOrder")
     public AppResponse listOrder(OrderInfoF orderInfoF){
         try{
             return orderService.listOrder(orderInfoF);
@@ -49,7 +50,7 @@ public class OrderController {
      * @author weiming
      * @date 2020-4-5
      */
-    @RequestMapping("getOrderById")
+    @RequestMapping("getOrder")
     public AppResponse getOrderById(String orderId){
         try{
             return orderService.getOrderById(orderId);
@@ -66,12 +67,10 @@ public class OrderController {
      * @author weiming
      * @date 2020-4-5
      */
-    @PostMapping("updateOrder")
-    public AppResponse updateOrder(String orderId,int state){
+    @PostMapping("updateOrderState")
+    public AppResponse updateOrder(String orderId,int orderState){
         try{
-            //获取用户ID
-            String userId = AuthorUtil.getCurrentUserId();
-            return orderService.updateOrderState(orderId,state);
+            return orderService.updateOrderState(orderId,orderState);
         }catch (Exception e){
             logger.error("修改订单状态错误",e);
             System.out.println(e.toString());

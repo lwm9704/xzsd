@@ -18,11 +18,11 @@ public class RotationInfoA {
     /**
      * 图片KEY
      */
-    private String pictureKey;
+    private String pKey;
     /**
      * url
      */
-    private String url;
+    private String pUrl;
     /**
      * 状态0禁用1启用
      */
@@ -30,11 +30,11 @@ public class RotationInfoA {
     /**
      * 有效期起
      */
-    private Date starTime;
+    private String starTime;
     /**
      * 有效期止
      */
-    private Date endTime;
+    private String endTime;
     /**
      * 商品编码
      */
@@ -48,21 +48,22 @@ public class RotationInfoA {
      */
     private String creatBy;
     /**
-     * 创建时间
-     */
-    private Date creatTime;
-    /**
      * 更新人
      */
     private String lastModifyBy;
     /**
-     * 更新时间
-     */
-    private Date modifyTime;
-    /**
      * 版本号
      */
     private int version;
+
+    /**
+     * 有效期起
+     */
+    private Date starDate;
+    /**
+     *有效期止
+     */
+    private Date endDate;
 
     public String getRotaId() {
         return rotaId;
@@ -80,20 +81,20 @@ public class RotationInfoA {
         this.rotaSort = rotaSort;
     }
 
-    public String getPictureKey() {
-        return pictureKey;
+    public String getpKey() {
+        return pKey;
     }
 
-    public void setPictureKey(String pictureKey) {
-        this.pictureKey = pictureKey;
+    public void setpKey(String pKey) {
+        this.pKey = pKey;
     }
 
-    public String getUrl() {
-        return url;
+    public String getpUrl() {
+        return pUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setpUrl(String pUrl) {
+        this.pUrl = pUrl;
     }
 
     public int getState() {
@@ -104,19 +105,19 @@ public class RotationInfoA {
         this.state = state;
     }
 
-    public Date getStarTime() {
+    public String getStarTime() {
         return starTime;
     }
 
-    public void setStarTime(Date starTime) {
+    public void setStarTime(String starTime) {
         this.starTime = starTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -144,14 +145,6 @@ public class RotationInfoA {
         this.creatBy = creatBy;
     }
 
-    public Date getCreatTime() {
-        return creatTime;
-    }
-
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
-    }
-
     public String getLastModifyBy() {
         return lastModifyBy;
     }
@@ -160,19 +153,27 @@ public class RotationInfoA {
         this.lastModifyBy = lastModifyBy;
     }
 
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
-
     public int getVersion() {
         return version;
     }
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public Date getStarDate() {
+        return starDate;
+    }
+
+    public void setStarDate(Date starDate) {
+        this.starDate = starDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

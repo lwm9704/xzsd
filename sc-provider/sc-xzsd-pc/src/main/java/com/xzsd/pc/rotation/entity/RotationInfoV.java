@@ -1,6 +1,5 @@
 package com.xzsd.pc.rotation.entity;
 
-import java.util.Date;
 
 /**
  * 轮播图信息展示实现类
@@ -9,11 +8,11 @@ public class RotationInfoV {
     /**
      * 轮播图id
      */
-    private String rotationId;
+    private String rotaId;
     /**
      * 排序
      */
-    private int sort;
+    private int rotaSort;
     /**
      * 状态
      */
@@ -21,30 +20,34 @@ public class RotationInfoV {
     /**
      * 有效期起
      */
-    private Date starTime;
+    private String starTime;
     /**
      * 有效期止
      */
-    private Date endTime;
+    private String endTime;
     /**
      * url
      */
-    private String url;
+    private String pUrl;
+    /**
+     *版本
+     */
+    private int version;
 
-    public String getRotationId() {
-        return rotationId;
+    public String getRotaId() {
+        return rotaId;
     }
 
-    public void setRotationId(String rotationId) {
-        this.rotationId = rotationId;
+    public void setRotaId(String rotaId) {
+        this.rotaId = rotaId;
     }
 
-    public int getSort() {
-        return sort;
+    public int getRotaSort() {
+        return rotaSort;
     }
 
-    public void setSort(int sort) {
-        this.sort = sort;
+    public void setRotaSort(int rotaSort) {
+        this.rotaSort = rotaSort;
     }
 
     public int getState() {
@@ -55,27 +58,35 @@ public class RotationInfoV {
         this.state = state;
     }
 
-    public Date getStarTime() {
+    public String getStarTime() {
         return starTime;
     }
 
-    public void setStarTime(Date starTime) {
+    public void setStarTime(String starTime) {
         this.starTime = starTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
-    public String getUrl() {
-        return url;
+    public String getpUrl() {
+        return pUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setpUrl(String pUrl) {
+        this.pUrl = pUrl;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

@@ -10,7 +10,7 @@ public class RotationInfoU {
     /**
      * 轮播图编号
      */
-    private String rotationId;
+    private String rotaId;
     /**
      * 轮播图状态0禁用1启用
      */
@@ -20,20 +20,16 @@ public class RotationInfoU {
      */
     private String lastModifyBy;
     /**
-     * 更新时间
-     */
-    private Date modifyTime;
-    /**
      * 版本号
      */
     private int version;
 
-    public String getRotationId() {
-        return rotationId;
+    public String getRotaId() {
+        return rotaId;
     }
 
-    public void setRotationId(String rotationId) {
-        this.rotationId = rotationId;
+    public void setRotaId(String rotaId) {
+        this.rotaId = rotaId;
     }
 
     public int getState() {
@@ -50,14 +46,6 @@ public class RotationInfoU {
 
     public void setLastModifyBy(String lastModifyBy) {
         this.lastModifyBy = lastModifyBy;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
     }
 
     public int getVersion() {

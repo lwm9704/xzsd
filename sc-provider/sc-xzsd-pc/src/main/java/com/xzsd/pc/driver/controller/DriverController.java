@@ -1,10 +1,12 @@
 package com.xzsd.pc.driver.controller;
 
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.pc.driver.entity.DriverInfoF;
 import com.xzsd.pc.driver.entity.DriverInfoU;
 import com.xzsd.pc.driver.service.DriverService;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.AuthorUtil;
+import com.xzsd.pc.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +21,7 @@ import java.rmi.server.ExportException;
  * @date 2020-4-8
  */
 @RestController
-@RequestMapping("/driver")
+@RequestMapping("/user")
 public class DriverController {
 
     private static final Logger logger = LoggerFactory.getLogger(DriverController.class);
@@ -38,8 +40,10 @@ public class DriverController {
     public AppResponse addDriver(DriverInfoU driverInfoU){
         try{
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             driverInfoU.setCreatBy(userId);
+            String driverId = StringUtil.getCommonCode(2);
+            driverInfoU.setDriverId(driverId);
             AppResponse appResponse = driverService.addDriver(driverInfoU);
             return appResponse;
         }catch (Exception e){
@@ -59,7 +63,7 @@ public class DriverController {
     public AppResponse updateDriver(DriverInfoU driverInfoU){
         try{
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             driverInfoU.setCreatBy(userId);
             driverInfoU.setLastModifyBy(userId);
             return driverService.updateDriver(driverInfoU);
@@ -76,11 +80,11 @@ public class DriverController {
      * @author weiming
      * @date 2020-4-8
      */
-    @PostMapping("deleteDriver")
+    @PostMapping("deleteDriverById")
     public AppResponse deleteDriver(String id){
         try{
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             return driverService.deleteDriver(id,userId);
         }catch (Exception e){
             logger.error("司机信息删除错误",e);
@@ -107,15 +111,28 @@ public class DriverController {
     }
     /**
      * 查询司机详情
-     * @param driverId
+     * @param id
      * @return
      * @author weiming
      * @date 2020-4-8
      */
-    @RequestMapping("getDriverById")
-    public AppResponse getDriverById(String driverId){
+    @RequestMapping("findDriver")
+    public AppResponse getDriverById(String id){
         try{
-            return driverService.getDriverById(driverId);
+            return driverService.getDriverById(id);
+        }catch (Exception e){
+            logger.error("司机信息查询错误",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+    /**
+     * 获取司机的信息
+     */
+    @RequestMapping("getDriver")
+    public AppResponse getDriver(String id){
+        try{
+            return driverService.getDriver(id);
         }catch (Exception e){
             logger.error("司机信息查询错误",e);
             System.out.println(e.toString());

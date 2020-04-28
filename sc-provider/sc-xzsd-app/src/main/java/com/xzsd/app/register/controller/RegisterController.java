@@ -31,7 +31,7 @@ public class RegisterController {
      * @author weiming
      * @date 2020-4-13
      */
-    @PostMapping("registerUser")
+    @PostMapping("clientRegister")
     public AppResponse register(RegisterInfo registerInfo){
         try{
             return registerService.register(registerInfo);

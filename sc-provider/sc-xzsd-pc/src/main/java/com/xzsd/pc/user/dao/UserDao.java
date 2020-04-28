@@ -15,6 +15,10 @@ public interface UserDao {
      */
     int countUserAcct(UserInfo userInfo);
     /**
+     * 统计是否该用户账号是否存在
+     */
+    int countAcct(UserInfo userInfo);
+    /**
      * 新增用户
      * @param userInfo
      * @return
@@ -32,7 +36,7 @@ public interface UserDao {
      * @param gUserId 更新人
      * @return
      */
-    int deleteUser(List<String> listId, @Param("gUserId") String gUserId);
+    int deleteUser(@Param("listId") List<String> listId, @Param("gUserId") String gUserId);
     /**
      * 修改用户信息
      * @param userInfo 用户信息

@@ -43,7 +43,6 @@
         sex,
         id_card,
         email,
-        invitation_code,
         role,
         is_delete,
         creat_by,
@@ -60,8 +59,27 @@
         #{sex},
         #{idCard},
         #{email},
+        3,
+        0,
+        #{userId},
+        now(),
+        #{userId},
+        now(),
+        0)
+    </insert>
+    <insert id="registerCustomer" parameterType="com.xzsd.app.register.entity.RegisterCustomer">
+        insert into t_customer
+        (customer_id,
+        invitation_code,
+        is_delete,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version)
+        value
+        (#{userId},
         #{invitationCode},
-        #{role},
         0,
         #{userId},
         now(),

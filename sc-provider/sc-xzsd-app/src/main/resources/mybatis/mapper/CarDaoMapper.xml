@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.customer.car.dao.CarDao">
+    <!--购物车列表-->
+    <resultMap id="carMap" type="com.xzsd.app.customer.car.entity.CarInfoV">
+        <id column="car_id" property="carId" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE"/>
+        <association property="goodsInfo" javaType="com.xzsd.app.customer.car.entity.Goods">
+        <id column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="sales_price" property="price" jdbcType="DOUBLE"/>
+        <result column="p_url" property="pUrl" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+    <resultMap id="orderGoods" type="com.xzsd.app.customer.car.entity.Order">
+        <id column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="total_price" property="toatlPrice" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <!--创建购物车-->
+    <insert id="addCar" parameterType="com.xzsd.app.customer.car.entity.CarInfoU">
+        insert into t_shoppingCar
+        (
+        car_id,
+        goods_id
+        num,
+        total_price,
+        state,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version
+        )
+        value
+        (
+        #{carId},
+        #{goodsId},
+        #{num},
+        #{num}*#{price},
+        1,
+        #{userId},
+        )
+    </insert>
+
+    <!--修改商品数量-->
+    <update id="updateCar" parameterType="com.xzsd.app.customer.car.entity.CarInfoU">
+        update t_shoppingCar
+        set
+        num = #{num},
+        price = #{price},
+        last_modify_by = #{userId},
+        modify_time = now(),
+        version = version + 1
+    </update>
+
+    <!--购物车列表-->
+    <select id="listCar" parameterType="java.lang.String" resultMap="carMap">
+        select
+        a.car_id,
+        a.num,
+        a.total_price,
+        b.goods_id,
+        b.goods_name,
+        b.sales_price,
+        b.p_url pUrl
+        from
+        t_shoppingCar a left join t_goods b
+        on a.goods_id = b.goods_id
+        where
+        a.is_delete = 0
+    </select>
+
+    <!--购物结算，修改状态-->
+    <update id="settlement" parameterType="java.lang.String">
+        update t_shoppingCar
+        set
+        state = 0,
+        last_modify_by = #{userId}
+        modify_time = now()
+        version = version + 1
+        where car_id in
+        <foreach collection="listCarId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--结算后，拉出清单-->
+    <select id="getGoodsList" parameterType="java.util.List" resultMap="orderGoods">
+        select
+        goods_id,
+        num,
+        total_price
+        from
+        t_shoppingCar
+        where
+        car_id in
+        <foreach collection="listCarId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--修改商品数量-->
+    <update id="changeGoodsNum" parameterType="com.xzsd.app.customer.car.entity.ChangeGoodsNum">
+        update t_goods
+        set
+        stock = stock - #{num},
+        last_modify_by = #{lastModifyBy},
+        modify_time = now(),
+        version = version + 1
+        where
+        goods_id = #{goodsId},
+        and
+        is_delete = 0
+    </update>
+
+    <!--新增订单详情-->
+    <insert id="creatOrderDetail" parameterType="com.xzsd.app.customer.car.entity.Order">
+        insert into t_order
+        (order_id,
+        goods_id,
+        num,
+        total_price,
+        is_delete,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version
+        )
+        value
+        (
+        #{orderId},
+        #{goodsId},
+        #{num},
+        #{totalPrice},
+        0,
+        #{creatBy},
+        now(),
+        #{creatBy},
+        now(),
+        0
+        )
+        <foreach collection="goodsList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </insert>
+
+    <!--创建订单-->
+    <insert id="addOrder" parameterType="java.lang.String">
+        insert into t_order
+        (order_id,
+        is_delete,
+        creat_by,
+        creat_time,
+        version)
+        value
+        (#{orderId},
+        0,
+        #{creatBy},
+        now(),
+        0)
+    </insert>
+</mapper>

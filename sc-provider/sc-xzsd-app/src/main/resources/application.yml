@@ -16,7 +16,7 @@ security:
 spring:
   redis:
     host: 127.0.0.1
-    password: admin
+    port: 6379
     database: 0
   datasource:
     name: dataSource
@@ -24,7 +24,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    password: root
+    password: lwm9704
     druid:
       initialSize: 1
       minIdle: 1
@@ -63,7 +63,8 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
 sc:
   cloud:
-    dev: true
+    debug: true
+    #dev: true
     task:
       core-pool-size: 20
       max-pool-size: 50

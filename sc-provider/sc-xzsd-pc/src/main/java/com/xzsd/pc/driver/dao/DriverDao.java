@@ -1,5 +1,6 @@
 package com.xzsd.pc.driver.dao;
 
+import com.xzsd.pc.driver.entity.AcctRole;
 import com.xzsd.pc.driver.entity.DriverInfoF;
 import com.xzsd.pc.driver.entity.DriverInfoU;
 import com.xzsd.pc.driver.entity.DriverInfoV;
@@ -28,7 +29,7 @@ public interface DriverDao {
      * @param userId
      * @return
      */
-    int deletedriver(List<String> listId, @Param("userId") String userId);
+    int deleteDriver(@Param("listId") List<String> listId, @Param("userId") String userId);
     /**
      * 查询司机信息列表
      * @param driverInfoF
@@ -42,9 +43,16 @@ public interface DriverDao {
      */
     DriverInfoV getDriverById(@Param("id") String id);
     /**
+     * 获取司机详情
+     */
+    DriverInfoU getDriver(@Param("id") String id);
+    /**
      * 校验司机信息是否已经存在
      * @param driverAcct
      * @return
      */
     int countDriver(String driverAcct);
+
+    AcctRole countRole(String driverAcct);
 }
+

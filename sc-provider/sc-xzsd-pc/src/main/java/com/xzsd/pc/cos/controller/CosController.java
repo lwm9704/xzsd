@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/Mg")
+@RequestMapping("/image")
 public class CosController {
 
     private static final Logger logger = LoggerFactory.getLogger(CosController.class);
@@ -25,27 +25,27 @@ public class CosController {
     /**
      * 上传图片
      * @param file
-     * @param mgInfo
+     * @param
      * @return
      * @author weiming
      * @date 2020-4-13
      */
     @PostMapping("upload")
-    AppResponse uploadMg(@RequestParam(value = "file") MultipartFile file, MgInfo mgInfo, HttpSession session){
+    AppResponse uploadMg(@RequestParam(value = "file") MultipartFile file, HttpSession session){
         try{
-            if(mgInfo.getFlag() == 0){
-                mgInfo.setTableName("t_goods");
-                mgInfo.setMainId("goods_id");
-            }
-            else if(mgInfo.getFlag() == 1){
-                mgInfo.setTableName("t_rotation");
-                mgInfo.setMainId("rota_id");
-            }
-            else if(mgInfo.getFlag() == 2){
-                mgInfo.setTableName("t_sys_user");
-                mgInfo.setMainId("user_id");
-            }
-            return cosService.upLoadMigc(file,mgInfo,session);
+//            if(mgInfo.getFlag() == 0){
+//                mgInfo.setTableName("t_goods");
+//                mgInfo.setMainId("goods_id");
+//            }
+//            else if(mgInfo.getFlag() == 1){
+//                mgInfo.setTableName("t_rotation");
+//                mgInfo.setMainId("rota_id");
+//            }
+//            else if(mgInfo.getFlag() == 2){
+//                mgInfo.setTableName("t_sys_user");
+//                mgInfo.setMainId("user_id");
+//            }
+            return cosService.upLoadMigc(file,session);
         }catch (Exception e){
             logger.error("上传图片失败",e);
             System.out.println(e.toString());

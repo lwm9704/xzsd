@@ -13,8 +13,8 @@ import java.util.List;
 public interface RotaDao {
     /**
      * 获取轮播图信息
-     * @param num 展示轮播图数量
+     * @param
      * @return listRota
      */
-    List<RotaInfoV> getRotaList(int num);
+    List<RotaInfoV> getRotaList();
 }

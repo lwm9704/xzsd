@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.userInfo.dao.UserInfoDao">
+    <!--评价列表-->
+    <resultMap id="evaluateList" type="com.xzsd.app.customer.evaluate.entity.EvaluateList">
+        <id column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+        <collection property="com.xzsd.app.customer.evaluate.entity.EvaluateInfoV">
+            <id column="evaluate_id" property="evaluateId" jdbcType="VARCHAR"/>
+            <result column="creat_by" property="userId" jdbcType="VARCHAR"/>
+            <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+            <result column="evaluate" property="evaluate" jdbcType="VARCHAR"/>
+            <result column="grade" property="grade" jdbcType="INTEGER"/>
+            <result column="creat_time" property="evaluateTime" jdbcType="DATE"/>
+        </collection>
+    </resultMap>
+    <!--查询商品评价列表-->
+    <select id="listEvaluate" parameterType="java.lang.String" resultMap="evaluateList">
+        select
+        a.goods_id,
+        a.evaluate_id,
+        a.evaluate,
+        a.grade,
+        a.creat_by,
+        a.creat_time,
+        b.user_name
+        from
+        t_evaluate a left join t_sys_user b
+        on a.creat_by = b.user_id
+        where
+        a.goods_id = #{goodsId}
+        and
+        is_delete = 0
+    </select>
+    <!--新增评论-->
+    <insert id="creatEvaluate" parameterType="com.xzsd.app.customer.evaluate.entity.EvaluateInfoAU">
+        insert into t_evaluate
+        (goods_id,
+        evaluate,
+        grade,
+        is_delete,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version)
+        value
+        (#{goodsId},
+        #{evaluate},
+        #{grade},
+        0,
+        #{userId},
+        now(),
+        #{userId},
+        now(),
+        0)
+    </insert>
+</mapper>

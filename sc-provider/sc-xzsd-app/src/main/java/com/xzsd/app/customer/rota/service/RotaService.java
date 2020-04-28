@@ -22,8 +22,8 @@ public class RotaService {
      * @param
      * @return AppResponse
      */
-    public AppResponse getRotaList(int num){
-        List<RotaInfoV> rotaInfoVList = rotaDao.getRotaList(num);
+    public AppResponse getRotaList(){
+        List<RotaInfoV> rotaInfoVList = rotaDao.getRotaList();
         return AppResponse.success("查询成功",rotaInfoVList);
     }
 }

@@ -3,10 +3,12 @@ package com.xzsd.pc.user.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.util.StringUtil;
+import com.xzsd.pc.cos.entity.MgInfo;
 import com.xzsd.pc.user.dao.UserDao;
 import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.PasswordUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,8 @@ public class UserService {
         int countUserAccount = userDao.countUserAcct(userInfo);
         String pwd = PasswordUtils.generatePassword(userInfo.getPassword());
         userInfo.setPassword(pwd);
+        String phone = String.valueOf(userInfo.getCall());
+        userInfo.setPhone(phone);
         if(countUserAccount != 0){
             return AppResponse.bizError("用户已存在");
         }
@@ -75,7 +79,7 @@ public class UserService {
      * @date 2020-3-26
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteUser(String userId,String gUserId){
+    public AppResponse deleteUser(@Param("userId") String userId, String gUserId){
         List<String> listId = Arrays.asList(userId.split(","));
         AppResponse appResponse = AppResponse.success("删除成功!");
         //删除用户
@@ -95,9 +99,13 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateUser(UserInfo userInfo){
         AppResponse appResponse = AppResponse.success("修改成功");
-        //校验账号是否存在
-        int countUserAcct = userDao.countUserAcct(userInfo);
-        if(countUserAcct != 0){
+        String pwd = PasswordUtils.generatePassword(userInfo.getPassword());
+        userInfo.setPassword(pwd);
+        String phone = String.valueOf(userInfo.getCall());
+        userInfo.setPhone(phone);
+        //校验用户账号是否存在
+        int countAcct = userDao.countAcct(userInfo);
+        if(countAcct > 1){
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
         //修改用户信息
@@ -117,6 +125,10 @@ public class UserService {
      */
     public AppResponse getUserByUserId(String userId){
         UserInfo userInfo = userDao.getUserByUserId(userId);
+        String str = userInfo.getPhone();
+        Long call = Long.parseLong(str);
+        System.out.println(call);
+        userInfo.setCall(call);
         return AppResponse.success("查询成功",userInfo);
     }
 }

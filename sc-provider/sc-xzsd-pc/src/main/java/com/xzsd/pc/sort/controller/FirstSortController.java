@@ -1,6 +1,9 @@
 package com.xzsd.pc.sort.controller;
 
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.pc.sort.entity.FirstSortInfo;
+import com.xzsd.pc.sort.entity.SortInfoA;
+import com.xzsd.pc.sort.entity.SortInfoU;
 import com.xzsd.pc.sort.service.FirstSortService;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.AuthorUtil;
@@ -18,7 +21,7 @@ import javax.annotation.Resource;
  * @date 2020-3-29
  */
 @RestController
-@RequestMapping("/firstSort")
+@RequestMapping("/user")
 public class FirstSortController {
 
     private static final Logger logger = LoggerFactory.getLogger(FirstSortController.class);
@@ -26,27 +29,6 @@ public class FirstSortController {
     @Resource
     private FirstSortService firstSortService;
 
-    /**
-     * 新增一级分类
-     * @param firstSortInfo
-     * @return AppResponse
-     * @author weiming
-     * @date 2020-3-29
-     */
-    @PostMapping("addFirstSort")
-    public AppResponse addFirstSort(FirstSortInfo firstSortInfo){
-        try{
-            //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
-            firstSortInfo.setCreatBy(userId);
-            AppResponse appResponse = firstSortService.addFirstSort(firstSortInfo);
-            return appResponse;
-        }catch (Exception e){
-            logger.error("分类新增失败",e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
     /**
      * 分类列表
      * @param firstSortInfo
@@ -64,18 +46,47 @@ public class FirstSortController {
             throw e;
         }
     }
+
     /**
-     * 删除一级分类
-     * @param firstSortId
-     * @return AppResponse
-     * @author weiming
-     * @date 2020-3-29
+     *查询详情
      */
-    @PostMapping("deleteFirstSort")
-    public AppResponse deleteFirstSort(String firstSortId){
+    @RequestMapping(value = "findGoodsSort")
+    public AppResponse getFirstSortInfo(String sortId){
         try{
-            String userId = AuthorUtil.getCurrentUserId();
-            return firstSortService.deleteFirstSort(firstSortId,userId);
+            return firstSortService.getSortInfo(sortId);
+        }catch (Exception e){
+            logger.error("分类查询错误",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     *修改分类信息
+     */
+    @PostMapping("updateGoodsSort")
+    public AppResponse updateFirstSort(SortInfoU sortInfoU){
+        try{
+            //获取用户id
+            String userId = SecurityUtils.getCurrentUserId();
+            sortInfoU.setLastModifyBy(userId);
+            return firstSortService.updateSort(sortInfoU);
+        }catch (Exception e){
+            logger.error("修改分类信息错误",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     *删除分类
+     */
+    @PostMapping("deleteGoodsSort")
+    public AppResponse deleteFirstSort(SortInfoU sortInfoU){
+        try{
+            String userId = SecurityUtils.getCurrentUserId();
+            sortInfoU.setLastModifyBy(userId);
+            return firstSortService.deleteSort(sortInfoU);
         }catch (Exception e){
             logger.error("分类删除错误",e);
             System.out.println(e.toString());
@@ -83,39 +94,18 @@ public class FirstSortController {
         }
     }
     /**
-     * 修改一级分类
-     * @param firstSortInfo
-     * @return AppResponse
-     * @author weiming
-     * @date 2020-3-29
+     * 新增分类
      */
-    @PostMapping("updateFirstSort")
-    public AppResponse updateFirstSort(FirstSortInfo firstSortInfo){
+    @PostMapping("addGoodsSort")
+    public AppResponse addFirstSort(SortInfoA sortInfoA){
         try{
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
-            firstSortInfo.setCreatBy(userId);
-            firstSortInfo.setLastModifyBy(userId);
-            return firstSortService.updateFirstSort(firstSortInfo);
+            String userId = SecurityUtils.getCurrentUserId();
+            sortInfoA.setCreatBy(userId);
+            AppResponse appResponse = firstSortService.addFirstSort(sortInfoA);
+            return appResponse;
         }catch (Exception e){
-            logger.error("修改分类信息错误",e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-    /**
-     * 查询一级分类详情
-     * @param firstSortId
-     * @return AppResponse
-     * @author weiming
-     * @date 2020-3-29
-     */
-    @RequestMapping(value = "getFirstSortInfo")
-    public AppResponse getFirstSortInfo(String firstSortId){
-        try{
-            return firstSortService.getFirstSortInfo(firstSortId);
-        }catch (Exception e){
-            logger.error("分类查询错误",e);
+            logger.error("分类新增失败",e);
             System.out.println(e.toString());
             throw e;
         }

@@ -6,7 +6,21 @@
         select count(user_acct)
         from t_sys_user
         where is_delete = 0
-        and user_acct = #{userAcct}
+        <if test="userAcct != null and userAcct != ''">
+            and user_acct = #{userAcct}
+        </if>
+        <if test="userId != null and userId != ''">
+            and user_id = #{userId}
+        </if>
+    </select>
+
+    <!--统计用户账号是否存在-->
+    <select id="countAcct" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
+        select count(user_Id)
+        from t_sys_user
+        where is_delete = 0
+        and
+        user_acct = #{userAcct}
     </select>
 
     <!--新增用户-->
@@ -26,7 +40,9 @@
             creat_time,
             last_modify_by,
             modify_time,
-            version)
+            version,
+            p_key,
+            p_url)
             value
             (#{userId},
             #{userName},
@@ -42,44 +58,47 @@
             now(),
             #{lastModifyBy},
             now(),
-            0
+            0,
+            #{pKey},
+            #{pUrl}
             )
     </insert>
 
     <!--用户列表-->
     <select id="listUsersByPage" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
-        a.user_id userId,
-        a.user_name userName,
-        a.user_acct userAcct,
-        a.user_password password,
-        a.role,
-        a.sex sex,
-        a.phone phone,
-        a.email email,
-        a.id_card idCard,
-        a.is_delete isDelete,
-        a.creat_by creatBy,
-        a.creat_time creatTime,
-        a.last_modify_by lastModifyBy,
-        a.modify_time modifyTime,
-        a.version version
-        from t_sys_user a
-        where a.is_delete = 0
+        user_id userId,
+        user_name userName,
+        user_acct userAcct,
+        user_password password,
+        role,
+        sex sex,
+        phone phone,
+        email email,
+        id_card idCard,
+        p_url pUrl,
+        is_delete isDelete,
+        creat_by creatBy,
+        creat_time creatTime,
+        last_modify_by lastModifyBy,
+        modify_time modifyTime,
+        version version
+        from t_sys_user
+        where is_delete = 0
         <if test="userAcct != null and userAcct != ''">
-            and a.user_acct like concat('%',#{userAcct},'%')
+            and user_acct like concat('%',#{userAcct},'%')
         </if>
         <if test="userName != null and userName != ''">
-            and a.user_name like concat('%',#{userName},'%')
+            and user_name like concat('%',#{userName},'%')
         </if>
-        <if test="role != 3">
-            and a.role = #{role}
+        <if test="role != 4">
+            and role = #{role}
         </if>
         order by creat_time desc
     </select>
 
     <!--删除用户-->
-    <update id="deleteUser" parameterType="com.xzsd.pc.user.entity.UserInfo">
+    <update id="deleteUser" parameterType="java.util.List">
         update t_sys_user
         set
         is_delete = 1,
@@ -102,6 +121,7 @@
                     sex = #{sex},
                     phone = #{phone},
                     email = #{email},
+                    p_url = #{pUrl},
                     modify_time = now(),
                     last_modify_by = #{lastModifyBy},
                     version = version + 1
@@ -120,6 +140,7 @@
             sex,
             phone,
             email,
+            p_url pUrl,
             version
         from t_sys_user
         where user_id = #{userId}

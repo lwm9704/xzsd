@@ -16,7 +16,7 @@ public class HotGoodsInfoV {
     /**
      * 商品图片
      */
-    private String p_Url;
+    private String pUrl;
 
     public String getGoodsId() {
         return goodsId;
@@ -42,11 +42,11 @@ public class HotGoodsInfoV {
         this.salesPrice = salesPrice;
     }
 
-    public String getP_Url() {
-        return p_Url;
+    public String getpUrl() {
+        return pUrl;
     }
 
-    public void setP_Url(String p_Url) {
-        this.p_Url = p_Url;
+    public void setpUrl(String pUrl) {
+        this.pUrl = pUrl;
     }
 }

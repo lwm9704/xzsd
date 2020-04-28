@@ -1,10 +1,12 @@
 package com.xzsd.pc.shop.controller;
 
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.pc.shop.entity.ShopInfoF;
 import com.xzsd.pc.shop.entity.ShopInfoU;
 import com.xzsd.pc.shop.service.ShopService;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.AuthorUtil;
+import com.xzsd.pc.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Random;
 
 /**
  * @author weiming
  * @date 2020-4-7
  */
 @RestController
-@RequestMapping("/shop")
+@RequestMapping("/user")
 public class ShopController {
 
     private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
@@ -40,8 +43,13 @@ public class ShopController {
     public AppResponse addShop(ShopInfoU shopInfoU) {
         try {
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             shopInfoU.setByUserId(userId);
+            String shopId = StringUtil.getCommonCode(2);
+            shopInfoU.setShopId(shopId);
+            Random random =new Random();
+            String invitationCode = userId.substring(5,9)+random.nextInt(8);
+            shopInfoU.setInvitationCode(invitationCode);
             AppResponse appResponse = shopService.addShopInfo(shopInfoU);
             return appResponse;
         } catch (Exception e) {
@@ -58,11 +66,11 @@ public class ShopController {
      * @author weiming
      * @date 2020-4-7
      */
-    @PostMapping("deleteShop")
+    @PostMapping("deleteShopById")
     public AppResponse deleteShop(String shopId) {
         try {
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             return shopService.deleteShop(shopId, userId);
         } catch (Exception e) {
             logger.error("门店删除错误");
@@ -81,7 +89,7 @@ public class ShopController {
     public AppResponse updateShop(ShopInfoU shopInfoU){
         try{
             //获取用户id
-            String userId = AuthorUtil.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             shopInfoU.setByUserId(userId);
             return shopService.updateShop(shopInfoU);
         }catch (Exception e){

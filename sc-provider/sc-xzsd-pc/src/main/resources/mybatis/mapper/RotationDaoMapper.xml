@@ -5,10 +5,10 @@
     <!--新增轮播图-->
     <insert id="uploadMg" parameterType="com.xzsd.pc.rotation.entity.RotationInfoU">
         insert into t_rotation
-        (rotation_id,
-        sort,
-        picture_key,
-        url,
+        (rota_id,
+        rota_sort,
+        p_key,
+        p_url,
         state,
         star_time,
         end_time,
@@ -20,31 +20,31 @@
         modify_time,
         version)
         value
-        (#{rotationId},
-        #{sort},
-        #{pictureKey},
-        #{url},
-        0,
-        #{starTime},
-        #{endTime},
+        (#{rotaId},
+        #{rotaSort},
+        #{pKey},
+        #{pUrl},
+        1,
+        #{starDate},
+        #{endDate},
         #{goodsId},
         0,
         #{creatBy},
         now(),
-        #{lastModifyBy},
+        #{creatBy},
         now(),
         0)
     </insert>
 
     <!--删除轮播图-->
-    <update id="deleteMg" parameterType="com.xzsd.pc.rotation.entity.RotationInfoU">
+    <update id="deleteMg" parameterType="java.lang.String">
         update t_rotation
         set
         last_modify_by = #{userId},
         modify_time = now(),
-        is_delete = #{isDelete},
+        is_delete = 1,
         version = version + 1
-        where rotation_id in
+        where rota_id in
         <foreach item="item" index="index" collection="listId" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -58,29 +58,44 @@
         last_modify_by = #{lastModifyBy},
         modify_time = now(),
         version = version + 1
-        where rotation_id = #{rotationId}
-        and version = #{version}
+        where rota_id = #{rotaId}
         and is_delete = 0
     </update>
 
     <!--查询轮播图-->
-    <select id="listRotation" parameterType="java.lang.Integer" resultType="com.xzsd.pc.rotation.entity.RotationInfoU">
+    <select id="listRotationByPage" parameterType="com.xzsd.pc.rotation.entity.RotationInfoU" resultType="com.xzsd.pc.rotation.entity.RotationInfoV">
         select
-        sort,
-        url,
+        rota_id rotaId,
+        rota_sort rotaSort,
+        p_url pUrl,
         state,
         star_time starTime,
-        end_time endTime
+        end_time endTime,
+        version
         from t_rotation
-        where state = #{state}
-        and is_delete = 0
+        where
+        is_delete = 0
+        <if test="state != 2">
+            and state = #{state}
+        </if>
     </select>
 
     <!--检验该编号轮播图是否存在-->
     <select id="countRotation" parameterType="java.lang.String" resultType="int">
-        select count(rotation_id)
+        select count(rota_id)
         from t_rotation
-        where rotation_id = #{rotationId}
+        where rota_id = #{rotaId}
         and is_delete = 0
     </select>
+
+    <!--新增校验排序-->
+    <select id="addCountSort" parameterType="com.xzsd.pc.rotation.entity.RotationInfoA" resultType="int">
+        select count(rota_id)
+        from t_rotation
+        where
+        is_delete = 0
+        and
+        rota_sort = #{rotaSort}
+    </select>
+
 </mapper>

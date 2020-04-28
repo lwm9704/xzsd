@@ -14,6 +14,10 @@ public class ShopInfoF {
      */
     private String shoppowerId;
     /**
+     * 店长名字
+     */
+    private String shoppowerName;
+    /**
      * 省份字段值
      */
     private String provinceValue;
@@ -48,6 +52,14 @@ public class ShopInfoF {
 
     public void setShoppowerId(String shoppowerId) {
         this.shoppowerId = shoppowerId;
+    }
+
+    public String getShoppowerName() {
+        return shoppowerName;
+    }
+
+    public void setShoppowerName(String shoppowerName) {
+        this.shoppowerName = shoppowerName;
     }
 
     public String getProvinceValue() {

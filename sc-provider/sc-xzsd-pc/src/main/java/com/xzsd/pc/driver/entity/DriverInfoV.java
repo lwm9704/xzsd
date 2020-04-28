@@ -2,7 +2,11 @@ package com.xzsd.pc.driver.entity;
 
 public class DriverInfoV {
     /**
-     * 司机编号
+     * id
+     */
+    private String id;
+    /**
+     * 司机编号（用户编号）
      */
     private String driverId;
     /**
@@ -21,6 +25,14 @@ public class DriverInfoV {
      * 账号
      */
     private String driverAcct;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDriverId() {
         return driverId;

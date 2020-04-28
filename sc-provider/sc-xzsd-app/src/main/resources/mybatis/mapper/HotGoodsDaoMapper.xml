@@ -5,12 +5,25 @@
     <!--查询获取热门商品信息-->
     <select id="getHotGoodsByPage" parameterType="java.lang.Integer" resultType="com.xzsd.app.customer.hotGoods.entity.HotGoodsInfoV">
         select
-        goods_id goodsId,
-        goods_name goodsName,
-        sales_price salesPrice,
-        p_url pUrl
-        from t_host_goods
+        a.goods_id goodsId,
+        b.goods_name goodsName,
+        b.sales_price salesPrice,
+        b.p_url pUrl
+        from t_host_goods a left join t_goods b
+        on a.goods_id = b.goods_id
         where
-        sort &lt;= #{num}
+        sort &lt; #{num}
+        and
+        a.is_delete = 0
+    </select>
+    <!--获取展示数量-->
+    <select id="getShowNum" resultType="com.xzsd.app.customer.hotGoods.entity.ShowNum">
+        select
+        show_num num
+        from t_show
+        where
+        is_delete = 0
+        and
+        id = 1
     </select>
 </mapper>

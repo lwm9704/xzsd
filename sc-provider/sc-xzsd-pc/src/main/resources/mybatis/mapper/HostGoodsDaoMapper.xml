@@ -3,34 +3,48 @@
 <mapper namespace="com.xzsd.pc.hostGoods.dao.HostGoodsDao">
 
     <!--查询热门位商品列表-->
-    <select id="listHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoF" resultType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoV">
+    <select id="listHostGoodsByPage" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoF" resultType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoV">
         select
-        sort,
-        goods_id goodsId,
-        goods_name goodsName,
-        sales_price salesPrice,
-        goods_introduce goodsIntroduce,
-        from t_host_goods as a inner join t_goods as b
+        a.host_id hostId,
+        a.sort,
+        b.goods_id goodsId,
+        b.goods_name goodsName,
+        b.sales_price salesPrice,
+        b.introduce goodsIntroduce
+       from
+        t_host_goods a left join t_goods b
         on a.goods_id = b.goods_id
         where
-        sort &lt; #{showNum}
-        and is_delete = 0
-        order by sort
+        a.sort &lt; #{showNum}
+        and a.is_delete = 0
+        <if test="goodsName != null and goodsName != ''">
+            and b.goods_name like concat('%',#{goodsName},'%')
+        </if> 
+         <if test="goodsId != null and goodsId != ''">
+             and b.goods_id like concat('%',#{goodsId},'%')
+         </if>
+        order by a.sort
     </select>
 
     <!--新增热门位商品-->
     <insert id="addHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoU">
         insert into t_host_goods
-        (goods_Id,
+        (host_id,
+        goods_Id,
         sort,
         is_delete,
         creat_by,
         creat_time,
+        last_modify_by,
+        modify_time,
         version)
         value
-        (#{goodsId},
+        (#{hostId},
+        #{goodsId},
         #{sort},
         0,
+        #{creatBy},
+        now(),
         #{creatBy},
         now(),
         0)
@@ -43,43 +57,67 @@
         goods_id = #{goodsId},
         sort = #{sort},
         last_modify_by = #{lastModifyBy},
-        modify_time = #{modifyTime},
+        modify_time = now(),
         version = version + 1
         where
         host_id = #{hostId}
-        and version = #{version}
     </update>
 
     <!--删除热门位商品-->
-    <update id="deleteHostGoods" parameterType="com.xzsd.pc.hostGoods.entity.HostGoodsInfoU">
+    <update id="deleteHost" parameterType="java.lang.String">
         update t_host_goods
         set
         is_delete = 1,
-        last_modify_by = #{lastModifyBy},
-        modify_time = #{modifyTime},
+        last_modify_by = #{userId},
+        modify_time = now(),
         version = version + 1
         where
-        host_id = #{hostId}
+        host_id in
+        <foreach collection="listHostId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </update>
 
     <!--设置展示数量-->
-    <update id="setShowNum" parameterType="java.lang.String">
+    <update id="setShowNum" parameterType="com.xzsd.pc.hostGoods.entity.ShowNumInfo">
         update t_show
         set
-        show_num =#{showNum}
-        last_modify_by = #{lastModifyBy},
-        modify_time = #{modifyTime},
+        show_num =#{showNum},
+        last_modify_by = #{userId},
+        modify_time = now(),
         version = version + 1
         where
         is_delete = 0
     </update>
 
     <!--获取展示数量-->
-    <select id="getShowNum" resultType="int">
+    <select id="getShowNum" resultType="com.xzsd.pc.hostGoods.entity.ShowNumInfo">
         select
         show_num showNum
         from t_show
         where
         is_delete = 0
+        and
+        id = 1
+    </select>
+    
+    <select id="countHostGoods" parameterType="java.lang.String" resultType="int">
+        select count(goods_id)
+        from
+        t_host_goods
+        where
+        goods_id = #{goodsId}
+        and
+        is_delete = 0
+    </select>
+
+    <select id="getHostInfo" parameterType="java.lang.String" resultType="com.xzsd.pc.hostGoods.entity.HostInfo">
+        select
+        sort,
+        goods_id
+        from
+        t_host_goods
+        where
+        host_id = #{hostId}
     </select>
 </mapper>

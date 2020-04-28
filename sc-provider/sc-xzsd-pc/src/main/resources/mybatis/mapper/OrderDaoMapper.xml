@@ -1,65 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.order.dao.OrderDao">
+    <resultMap id="OrderListMap" type="com.xzsd.pc.order.entity.Order">
+        <id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="order_state" property="orderState" jdbcType="INTEGER"/>
+        <result column="pay_state" property="payState" jdbcType="INTEGER"/>
+        <result column="user_name" property="orderBy" jdbcType="VARCHAR"/>
+        <result column="shop_id" property="shopId" jdbcType="VARCHAR"/>
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="pay_time" property="payTime" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="detailsMap" type="com.xzsd.pc.order.entity.OrderDetails">
+        <id column="creat_by" property="userId" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="num" property="goodsNum" jdbcType="INTEGER"/>
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="sales_price" property="salesPrice" jdbcType="DOUBLE"/>
+        <result column="set_price" property="setPrice" jdbcType="DOUBLE"/>
+    </resultMap>
 
     <!--订单列表查询-->
-    <select id="listOrder" parameterType="com.xzsd.pc.order.entity.OrderInfoF" resultType="com.xzsd.pc.order.entity.OrderInfo">
+    <select id="listOrderByPage" parameterType="com.xzsd.pc.order.entity.OrderInfoF" resultMap="OrderListMap">
         select
-        order_id orderId,
-        total_price totalPrice,
-        order_state orderState,
-        pay_state payState,
-        shop_id shopId,
-        user_name userName,
-        phone,
-        pay_time payTime
-        from t_order as a left join t_sys_user
+        a.order_id,
+        a.total_price,
+        a.order_state,
+        a.pay_state,
+        b.user_name,
+        e.shop_id,
+        e.shop_name,
+        b.phone,
+        a.pay_time
+        from t_order a left join t_sys_user b
         on a.creat_by  = b.user_id
+        left join t_customer d
+        on b.user_Id = d.customer_id
+        left join t_shop e
+        on d.invitation_code = e.invitation_code
         where
-        is_delete = 0
-        <if test="creatId != null and creatId != ''">
-            and creat_id like concat('%',#{userId},'%')
+        a.is_delete = 0
+        <if test="orderName != null and orderName != ''">
+            and b.user_name like concat('%',#{orderName},'%')
         </if>
-        <if test="orderId != null and order != ''">
-            and order_id like concat('%',#{orderId},'%')
+        <if test="orderId != null and orderId != ''">
+            and a.order_id like concat('%',#{orderId},'%')
         </if>
         <if test="phone != null and phone != ''">
-            and phone like concat('%',#{phone}.'%')
+            and b.phone like concat('%',#{phone},'%')
         </if>
-        <if test="state != null and state != ''">
-            and state = #{state}
+        <if test="orderState != 7">
+            and a.order_state = #{orderState}
         </if>
-        <if test="minTime != null and minTime != '' and maxTime != null and maxTime != ''">
-            and pay_time between #{minTime} and #{minTime}
+        <if test="minTime != null and minTime != ''">
+            and a.pay_time &gt; #{minTime}
+        </if>
+        <if test="maxTime != null and maxTime != ''">
+            and a.pay_time &lt; #{maxTime}
         </if>
     </select>
 
     <!--查询订单详情-->
-    <select id="getOrderById" parameterType="java.lang.String" resultType="com.xzsd.pc.order.entity.OrderInfoD">
+    <select id="getOrderById" parameterType="java.lang.String" resultMap="detailsMap">
         select
-            user_id userId,
-            order_id orderId,
-            goods_id goodsId,
-            goods_name goodsName,
-            pay_num payNum,
-            total_price totalPrice,
-            sales_price salesPrice,
-            set_price setPrice
-        from t_shoppingCar as a inner join t_goods as b
-        on a.goods_id = b.goods_id
-        left join t_order
-        where order_id = #{orderId}
-        and is_delete = 0
+            a.creat_by,
+            a.order_id,
+            b.goods_id,
+            d.goods_name,
+            a.num,
+            a.total_price,
+            d.sales_price,
+            d.set_price
+        from t_order as a left join t_order_details as b
+        on a.order_id = b.order_id
+        left join t_goods as d
+        on b.goods_id = d.goods_id
+        where a.order_id = #{orderId}
+        and a.is_delete = 0
     </select>
 
     <!--修改订单状态-->
-    <update id="updateOrderState" parameterType="com.xzsd.pc.order.entity.OrderInfoV">
+    <update id="updateOrderState" parameterType="java.lang.String">
         update t_order
         set
-        state = #{state},
-        last_modify_by = #{lastModifyBy},
+        order_state = #{orderState},
+        last_modify_by = #{userId},
         modify_time = now(),
-        verion = version + 1
-        where order_id = #{orderId}
+        version = version + 1
+        where order_id in
+        <foreach collection="orderList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </update>
 </mapper>

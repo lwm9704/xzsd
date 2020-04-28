@@ -18,7 +18,7 @@ public class GoodsInfoU {
     /**
      * 二级分类编号
      */
-    private String SecondSortId;
+    private String secondSortId;
     /**
      * 定价
      */
@@ -43,10 +43,19 @@ public class GoodsInfoU {
      * 商品介绍
      */
     private String introduce;
+    private String pKey;
     /**
-     * 商家编码
+     * 商品图片
      */
-    private String businessId;
+    private String pUrl;
+    /**
+     * 商家名称
+     */
+    private String businessName;
+    /**
+     * 商品销量
+     */
+    private int salesVolume;
     /**
      * 出版社
      */
@@ -55,6 +64,14 @@ public class GoodsInfoU {
      * 作家
      */
     private String author;
+    /**
+     * 浏览量
+     */
+    private int browse;
+    /**
+     * 状态
+     */
+    private int state;
     /**
      * 是否删除 0没有删除1已删除
      */
@@ -105,11 +122,11 @@ public class GoodsInfoU {
     }
 
     public String getSecondSortId() {
-        return SecondSortId;
+        return secondSortId;
     }
 
     public void setSecondSortId(String secondSortId) {
-        SecondSortId = secondSortId;
+        this.secondSortId = secondSortId;
     }
 
     public double getSetPrice() {
@@ -152,12 +169,76 @@ public class GoodsInfoU {
         this.advert = advert;
     }
 
-    public String getBusinessId() {
-        return businessId;
+    public String getIntroduce() {
+        return introduce;
     }
 
-    public void setBusinessId(String businessId) {
-        this.businessId = businessId;
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public String getpKey() {
+        return pKey;
+    }
+
+    public void setpKey(String pKey) {
+        this.pKey = pKey;
+    }
+
+    public String getpUrl() {
+        return pUrl;
+    }
+
+    public void setpUrl(String pUrl) {
+        this.pUrl = pUrl;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
+
+    public int getSalesVolume() {
+        return salesVolume;
+    }
+
+    public void setSalesVolume(int salesVolume) {
+        this.salesVolume = salesVolume;
+    }
+
+    public String getPress() {
+        return press;
+    }
+
+    public void setPress(String press) {
+        this.press = press;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public int getBrowse() {
+        return browse;
+    }
+
+    public void setBrowse(int browse) {
+        this.browse = browse;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public int getIsDelete() {
@@ -206,21 +287,5 @@ public class GoodsInfoU {
 
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    public String getPress() { return press; }
-
-    public void setPress(String press) { this.press = press; }
-
-    public String getIntroduce() { return introduce; }
-
-    public void setIntroduce(String goods_introduce) { this.introduce = introduce; }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 }

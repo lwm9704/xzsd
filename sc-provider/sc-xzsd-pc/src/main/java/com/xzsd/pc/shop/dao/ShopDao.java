@@ -1,5 +1,6 @@
 package com.xzsd.pc.shop.dao;
 
+import com.xzsd.pc.shop.entity.AcctRole;
 import com.xzsd.pc.shop.entity.ShopInfoF;
 import com.xzsd.pc.shop.entity.ShopInfoU;
 import com.xzsd.pc.shop.entity.ShopInfoV;
@@ -16,14 +17,14 @@ public interface ShopDao {
      * @param shopInfoU
      * @return
      */
-    int addShopInfo(ShopInfoU shopInfoU);
+    int addShop(ShopInfoU shopInfoU);
     /**
      * 删除门店信息
      * @param listId
      * @param userId
      * @return
      */
-    int deleteShopId(List<String> listId, @Param("userId") String userId);
+    int deleteShopId(@Param("listId") List<String> listId, @Param("userId") String userId);
     /**
      * 更新门店信息
      * @param shopInfoU
@@ -46,4 +47,8 @@ public interface ShopDao {
      * @return
      */
     int countShop(ShopInfoU shopInfoU);
+    /**
+     * 校验改该账号角色是不是司机
+     */
+    AcctRole countRole(ShopInfoU shopInfoU);
 }

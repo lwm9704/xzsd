@@ -11,7 +11,7 @@ import com.qcloud.cos.model.GeneratePresignedUrlRequest;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
-import com.xzsd.pc.cos.dao.CosDao;
+//import com.xzsd.pc.cos.dao.CosDao;
 import com.xzsd.pc.cos.entity.MgInfo;
 import com.xzsd.pc.util.AppResponse;
 import org.springframework.stereotype.Service;
@@ -34,8 +34,8 @@ public class CosService {
     private static final String BUCKETNAME = "xzsdservice-1301653447";
     private static final String APPID = "1301653447";
 
-    @Resource
-    private CosDao cosDao;
+//    @Resource
+//    private CosDao cosDao;
 
     /**
      * 初始化CosClient
@@ -56,12 +56,9 @@ public class CosService {
     /**
      * 上传文件并获取url
      */
-    public AppResponse upLoadMigc(@RequestParam(value = "file") MultipartFile file, MgInfo mgInfo, HttpSession session) {
+    public AppResponse upLoadMigc(@RequestParam(value = "file") MultipartFile file, HttpSession session) {
         if(file == null){
             return AppResponse.bizError("文件为空");
-        }
-        if(mgInfo.getMainId() == null){
-            return AppResponse.bizError("主键编号为空");
         }
         //获得上传时的key
         String oldFileName = file.getOriginalFilename();
@@ -92,24 +89,27 @@ public class CosService {
         } catch (CosClientException e) {
             e.printStackTrace();
         }
-        mgInfo.setpKey(key);
+//        mgInfo.setpKey(key);
 
         //获取url
         GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(BUCKETNAME, key, HttpMethodName.GET);
 
-        Date expirationDate = new Date(System.currentTimeMillis() + 30L * 60L * 1000L);
+        Date expirationDate = new Date(System.currentTimeMillis() + 3600L * 1000 * 24 * 365 * 10);
         req.setExpiration(expirationDate);
 
         URL url = cosClient.generatePresignedUrl(req);
 
         cosClient.shutdown();
-        mgInfo.setpUrl(url.toString());
-        //更新数据库
-        int count = cosDao.uploadMg(mgInfo);
-        if(count == 0){
-            return AppResponse.bizError("更新数据库失败");
+        MgInfo mgInfo =new MgInfo();
+        mgInfo.setpKey(key);
+        String pUrl = url.toString();
+        mgInfo.setpUrl(pUrl);
+//        //更新数据库
+//        int count = cosDao.uploadMg(mgInfo);
+        if(pUrl == null){
+            return AppResponse.bizError("上传失败");
         }
-        return AppResponse.success("上传成功，数据库已更新");
+        return AppResponse.success("上传成功",mgInfo);
     }
 
 

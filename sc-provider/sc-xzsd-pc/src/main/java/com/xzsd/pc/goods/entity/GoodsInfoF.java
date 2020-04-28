@@ -8,7 +8,7 @@ public class GoodsInfoF {
     /**
      * 商品状态
      */
-    private int goodsState;
+    private int state;
     /**
      * 广告词
      */
@@ -30,12 +30,12 @@ public class GoodsInfoF {
         this.goodsName = goodsName;
     }
 
-    public int getGoodsState() {
-        return goodsState;
+    public int getState() {
+        return state;
     }
 
-    public void setGoodsState(int goodsState) {
-        this.goodsState = goodsState;
+    public void setState(int state) {
+        this.state = state;
     }
 
     public String getAdvert() {

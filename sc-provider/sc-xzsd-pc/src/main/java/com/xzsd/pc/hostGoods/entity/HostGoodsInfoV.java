@@ -22,14 +22,6 @@ public class HostGoodsInfoV {
      * 商品介绍
      */
     private String goodsIntroduce;
-    /**
-     * 每一页大小
-     */
-    private int pageSize;
-    /**
-     * 页数
-     */
-    private int pageNum;
 
     /**
      * id
@@ -84,19 +76,4 @@ public class HostGoodsInfoV {
         this.goodsIntroduce = goodsIntroduce;
     }
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
 }

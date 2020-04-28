@@ -3,7 +3,7 @@
 <mapper namespace="com.xzsd.pc.customer.dao.CustomerDao">
 
     <!--客户列表查询-->
-    <select id="listCustomer" parameterType="com.xzsd.pc.customer.entity.CustomerInfo" resultType="com.xzsd.pc.customer.entity.CustomerInfo">
+    <select id="listCustomerByPage" parameterType="com.xzsd.pc.customer.entity.CustomerInfo" resultType="com.xzsd.pc.customer.entity.CustomerInfo">
         select
         user_acct customerAcct,
         user_name customerName,
@@ -12,16 +12,20 @@
         email,
         id_card idCard
         from t_sys_user as a left join t_customer as b
-        on a.user_id = b.user_id
+        on a.user_id = b.customer_id
         where
-        is_delete = 0
+        a.is_delete = 0
+        and
+        b.is_delete = 0
+        and
+        role = 3
         <if test="customerName != null and customerName != ''">
             and user_name like concat ('%',#{customerName},'%')
         </if>
         <if test="customerAcct != null and customerAcct != ''">
             and user_acct like concat('%',#{customerAcct},'%')
         </if>
-        order by creat_time
+        order by b.creat_time
     </select>
 
     <!--客户详情查询-->
@@ -37,7 +41,8 @@
         on a.user_id = b.user_id
         where
         a.user_id = #{customerId}
-        and is_delete = 0
+        and a.is_delete = 0
+        and a.is_delete = 0
     </select>
 
 </mapper>

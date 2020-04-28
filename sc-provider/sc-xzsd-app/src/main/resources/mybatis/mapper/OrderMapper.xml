@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzsd.app.customer.order.dao.OrderDao">
+    <resultMap id="orderList" type="com.xzsd.app.customer.order.entity.Order">
+        <id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="order_state" property="orderState" jdbcType="INTEGER"/>
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="good_num" property="goodNum" jdbcType="INTEGER"/>
+        <collection property="goodsList" ofType="com.xzsd.app.customer.order.entity.Goods">
+            <id column="goods_id" property="goods_id" jdbcType="VARCHAR"/>
+            <result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+            <result column="introduce" property="introduce" jdbcType="VARCHAR"/>
+            <result column="sales_price" property="salsePrice" jdbcType="DOUBLE"/>
+            <result column="num" property="num" jdbcType="INTEGER"/>
+            <result column="p_url" property="pUrl" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <!--获取订单列表-->
+    <select id="getOrderList" parameterType="java.lang.String" resultMap="orderList">
+        select
+        a.*,
+        d.goods_id,
+        d.goods_name,
+        d.introduce,
+        d.sales_price,
+        d.num,
+        d.p_url
+        from
+        t_order a,
+        t_order_details b,
+        t_goods d
+        where
+        a.order_id = b.order_id
+        and
+        b.goods_id = d.goods_id
+        and
+        a.creat_by = #{userId}
+        and
+        is_delete = 0
+    </select>
+
+    <!--创建订单-->
+    <insert id="addOrder" parameterType="com.xzsd.app.customer.order.entity.OrderU">
+        insert into t_order
+        (order_id,
+        num,
+        total_price,
+        is_delete,
+        creat_by,
+        creat_time,
+        last_modify_by,
+        modify_time,
+        version)
+        value
+        (#{orderId},
+        #{num},
+        #{totalPrice},
+        0,
+        #{userId},
+        now(),
+        #{userId},
+        now(),
+        0)
+    </insert>
+
+    <!--删除订单-->
+    <update id="deleteOrder" parameterType="java.lang.String">
+        update t_order
+        set
+        is_delete = 1,
+        last_modify_by = #{userId},
+        modify_time = now(),
+        where order_id in
+        <foreach collection="listId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--修改订单状态-->
+    <update id="updateOrderState" parameterType="com.xzsd.app.customer.order.entity.State">
+        update t_order
+        set
+        order_state = #{state},
+        last_modify_by = #{userId},
+        modify_time = now(),
+        version = version + 1
+        where
+        orde_id = #{orderId}
+        and
+        is_delete = 0
+    </update>
+</mapper>

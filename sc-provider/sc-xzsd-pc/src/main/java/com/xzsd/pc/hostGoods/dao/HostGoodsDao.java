@@ -1,9 +1,8 @@
 package com.xzsd.pc.hostGoods.dao;
 
-import com.xzsd.pc.hostGoods.entity.HostGoodsInfoF;
-import com.xzsd.pc.hostGoods.entity.HostGoodsInfoU;
-import com.xzsd.pc.hostGoods.entity.HostGoodsInfoV;
+import com.xzsd.pc.hostGoods.entity.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface HostGoodsDao {
     /**
      * 热门位列表查询
      */
-    List<HostGoodsInfoV> listHostGoodsByPage(HostGoodsInfoF hostGoodsInfoF,int showNum);
+    List<HostGoodsInfoV> listHostGoodsByPage(HostGoodsInfoF hostGoodsInfoF);
     /**
      * 热门位商品新增
      */
@@ -25,17 +24,22 @@ public interface HostGoodsDao {
     /**
      * 删除热门位商品
      */
-    int deleteHost(String hostId,String userId);
+    int deleteHost(@Param("listHostId") List<String> listHostId,@Param("userId") String userId);
     /**
      * 展示数量设置
      */
-    int setShowNum(int showNum);
+    int setShowNum(ShowNumInfo showNumInfo);
     /**
      * 获取展示数量
      */
-    int getShowNum();
+    ShowNumInfo getShowNum();
     /**
      * 校验该商品是否在热门位
      */
     int countHostGoods(String goodsId);
+
+    /**
+     * 热门商品详情
+     */
+    HostInfo getHostInfo(String hostId);
 }

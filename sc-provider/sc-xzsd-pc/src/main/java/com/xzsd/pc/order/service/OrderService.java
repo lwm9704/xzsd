@@ -1,11 +1,10 @@
 package com.xzsd.pc.order.service;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.pc.order.dao.OrderDao;
-import com.xzsd.pc.order.entity.OrderInfo;
+import com.xzsd.pc.order.entity.OrderDetails;
 import com.xzsd.pc.order.entity.OrderInfoF;
-import com.xzsd.pc.order.entity.OrderInfoV;
+import com.xzsd.pc.order.entity.OrderInfoState;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.AuthorUtil;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class OrderService {
      * @date 2020-4-5
      */
     public AppResponse listOrder(OrderInfoF orderInfoF){
-        List<OrderInfo> orderInfoList = orderDao.listOrderByPage(orderInfoF);
+        List<OrderDetails> orderInfoList = orderDao.listOrderByPage(orderInfoF);
         return AppResponse.success("查询成功！",getPageInfo(orderInfoList));
     }
     /**
@@ -43,8 +42,8 @@ public class OrderService {
      * @date 2020-4-5
      */
     public AppResponse getOrderById(String orderId){
-        OrderInfo orderInfo = orderDao.getOrderById(orderId);
-        return AppResponse.success("查询成功！",orderInfo);
+        List<OrderDetails> orderDetailsList = orderDao.getOrderById(orderId);
+        return AppResponse.success("查询成功！",orderDetailsList);
     }
     /**
      * 修改订单状态
@@ -54,21 +53,13 @@ public class OrderService {
      * @date 2020-4-5
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateOrderState(String orderId,int state){
+    public AppResponse updateOrderState(String orderId,int orderState){
         AppResponse appResponse = AppResponse.success("修改成功");
 
         List<String> listId = Arrays.asList(orderId.split(","));
-        String userId = AuthorUtil.getCurrentUserId();
-        List<OrderInfoV> orderInfoVList = new LinkedList<OrderInfoV>();
-        for(int i = 0;i < listId.size();i++){
-            OrderInfoV orderInfoV = new OrderInfoV();
-            orderInfoV.setOrderId(listId.get(i));
-            orderInfoV.setState(state);
-            orderInfoV.setLastModifyBy(userId);
-            orderInfoVList.add(orderInfoV);
-        }
+        String userId = SecurityUtils.getCurrentUserId();
         //修改订单状态
-        int count = orderDao.updateOrderState(orderInfoVList);
+        int count = orderDao.updateOrderState(listId,userId,orderState);
         if(count == 0){
             appResponse = AppResponse.versionError("数据有变化，请刷新");
             return appResponse;

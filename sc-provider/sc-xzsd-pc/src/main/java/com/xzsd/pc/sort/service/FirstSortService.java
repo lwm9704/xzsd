@@ -1,15 +1,19 @@
 package com.xzsd.pc.sort.service;
 
 
-import com.neusoft.util.StringUtil;
+import com.xzsd.pc.address.entity.CountyInfo;
 import com.xzsd.pc.sort.dao.FirstSortDao;
-import com.xzsd.pc.sort.entity.FirstSortInfo;
+import com.xzsd.pc.sort.dao.SecondSortDao;
+import com.xzsd.pc.sort.entity.*;
 import com.xzsd.pc.util.AppResponse;
+import com.xzsd.pc.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.neusoft.core.page.PageUtils.getPageInfo;
 
 /**
  * 实现类
@@ -23,29 +27,6 @@ public class FirstSortService {
     private FirstSortDao firstSortDao;
 
     /**
-     * 新增分类
-     * @param firstSortInfo
-     * @return
-     * @author weiming
-     * @date 2020-3-28
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public AppResponse addFirstSort(FirstSortInfo firstSortInfo){
-        //校验该分类是否存在
-        int countFirstSort = firstSortDao.countsFirstSort(firstSortInfo);
-        if(countFirstSort != 0){
-            return AppResponse.bizError("该分类已存在，请重新输入！");
-        }
-        firstSortInfo.setFirstSortId(StringUtil.getCommonCode(2));
-        firstSortInfo.setIsDelete(0);
-        //新增一级分类
-        int count = firstSortDao.addFirstSort(firstSortInfo);
-        if(count == 0){
-            return AppResponse.bizError("新增失败，请重试");
-        }
-        return AppResponse.success("新增成功");
-    }
-    /**
      * 查询分类列表
      * @param firstSortInfo
      * @return
@@ -54,52 +35,113 @@ public class FirstSortService {
      */
     public AppResponse listFirstSort(FirstSortInfo firstSortInfo){
         List<FirstSortInfo> firstSortInfoList = firstSortDao.listFirstSort(firstSortInfo);
-        return AppResponse.success("插叙成功",firstSortInfoList);
+        return AppResponse.success("查询成功",firstSortInfoList);
     }
+
+
     /**
-     * 删除一级分类
-     * @param firstSortId
-     * @param userId
-     * @return
-     * @author weiming
-     * @date 2020-3-28
+     * 查询分类详情
+     */
+    @Resource
+    private SecondSortDao secondSortDao;
+
+    public AppResponse getSortInfo(String sortId){
+        SortInfoA sortInfoA = new SortInfoA();
+        sortInfoA.setSortId(sortId);
+        //校验是该分类编号是否是一级分类
+        int countSort = firstSortDao.count(sortId);
+        if(countSort == 1){
+            SortInfo firstSortInfo = firstSortDao.getFirstSortInfo(sortInfoA);
+            return AppResponse.success("查询成功",firstSortInfo);
+        }
+        else{
+            SortInfo secondSortInfo = secondSortDao.getSecondSortInfo(sortInfoA);
+            System.out.println(secondSortInfo);
+            return AppResponse.success("查询成功",secondSortInfo);
+        }
+    }
+
+    /**
+     * 修改分类详情
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteFirstSort(String firstSortId,String userId){
-        AppResponse appResponse = AppResponse.success("删除成功!");
-        int count = firstSortDao.deleteFirstSort(firstSortId,userId);
-        if(count == 0){
-            appResponse = AppResponse.bizError("删除失败，请重试！");
+    public AppResponse updateSort(SortInfoU sortInfoU){
+
+        AppResponse appResponse = AppResponse.success("修改成功");
+        //修改分类信息
+        if(sortInfoU.getFatherSortId() == null){
+            int count = firstSortDao.updateFirstSort(sortInfoU);
+            if(count == 0){
+                appResponse = AppResponse.versionError("数据有变化，请刷新!");
+                return appResponse;
+            }
+        }
+        else{
+            int count = secondSortDao.updateSecondSort(sortInfoU);
+            if(count == 0){
+                appResponse = AppResponse.versionError("数据有变化，请刷新!");
+                return appResponse;
+            }
         }
         return appResponse;
     }
+
     /**
-     *修改一级分类
-     * @param firstSortInfo
-     * @return
-     * @author weiming
-     * @date 2020-3-28
+     *删除分类
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateFirstSort(FirstSortInfo firstSortInfo){
-        AppResponse appResponse = AppResponse.success("修改成功");
-        //修改一级分类信息
-        int count = firstSortDao.updateFirstSort(firstSortInfo);
-        if(count == 0){
-            appResponse = AppResponse.versionError("数据有变化，请刷新!");
+    public AppResponse deleteSort(SortInfoU sortInfoU){
+        System.out.println(sortInfoU.getSortId());
+        AppResponse appResponse = AppResponse.success("删除成功!");
+        if(sortInfoU.getFatherSortId() == null){
+            //判断是否有子类
+            CountSort sub = firstSortDao.countSort(sortInfoU.getSortId());
+            int countSub = sub.getCountSort();
+            int count = firstSortDao.deleteFirstSort(sortInfoU);
+            if(count == 0 || countSub != 0){
+                appResponse = AppResponse.versionError("删除一级分类失败，请重试!");
+                return appResponse;
+            }
             return appResponse;
         }
-        return appResponse;
+        else{
+            int countGoods = secondSortDao.countGoodsNum(sortInfoU.getSortId());
+            int countDe = secondSortDao.transmitDFirstSort(sortInfoU);
+            int count = secondSortDao.deleteSecondSort(sortInfoU);
+            if(count == 0 || countDe == 0 || countGoods != 0){
+                appResponse = AppResponse.versionError("删除二级分类失败，请重试!");
+                return appResponse;
+            }
+            return appResponse;
+        }
     }
     /**
-     * 查询一级分类详情
-     * @param firstSortId
-     * @return
-     * @author weiming
-     * @date 2020-3-28
+     * 新增分类
      */
-    public AppResponse getFirstSortInfo(String firstSortId){
-        FirstSortInfo firstSortInfo = firstSortDao.getFirstSortInfo(firstSortId);
-        return AppResponse.success("查询成功",firstSortInfo);
+    @Transactional(rollbackFor = Exception.class)
+    public AppResponse addFirstSort(SortInfoA sortInfoA){
+        sortInfoA.setSortId(StringUtil.getCommonCode(3));
+        if(sortInfoA.getFatherSortId() == null) {
+            int countFirstSort = firstSortDao.countsFirstSort(sortInfoA);
+            if (countFirstSort != 0) {
+                return AppResponse.bizError("该一级分类已存在，请重新输入！");
+            }
+            int count = firstSortDao.addFirstSort(sortInfoA);
+            if (count == 0) {
+                return AppResponse.bizError("新增失败，请重试");
+            }
+        }
+        else {
+            int countSecondSort = secondSortDao.countSecondSort(sortInfoA);
+            if (countSecondSort != 0) {
+                return AppResponse.bizError("该二级分类已存在，请重新输入！");
+            }
+            int count1 = secondSortDao.addSecondSort(sortInfoA);
+            int count2 = secondSortDao.transmitFirstSort(sortInfoA);
+            if ((count1 == 0) || (count2 == 0)) {
+                return AppResponse.bizError("新增失败，请重试!");
+            }
+        }
+            return AppResponse.success("新增成功");
+        }
     }
-}

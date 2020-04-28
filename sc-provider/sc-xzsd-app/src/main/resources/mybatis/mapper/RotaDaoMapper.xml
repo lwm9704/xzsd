@@ -5,13 +5,13 @@
     <!--获取轮播图-->
     <select id="getRotaList" parameterType="java.lang.Integer" resultType="com.xzsd.app.customer.rota.entity.RotaInfoV">
         select
-        picture_url rotaUrl,
+        p_url rotaUrl,
         goods_id goodsId,
         rota_sort rotaSort
-        from t_rotatiom
+        from t_rotation
         where
         state = 1
         and
-        rota_sort &lt;= #{rotaSort}
+        is_delete = 0
     </select>
 </mapper>

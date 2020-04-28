@@ -3,14 +3,6 @@ package com.xzsd.pc.hostGoods.entity;
 public class HostGoodsInfoF {
 
     /**
-     * 每一页大小
-     */
-    private int pageSize;
-    /**
-     * 页数
-     */
-    private int pageNum;
-    /**
      * 商品名称
      */
     private String goodsName;
@@ -19,21 +11,7 @@ public class HostGoodsInfoF {
      */
     private String goodsId;
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
+    private int showNum;
 
     public String getGoodsName() {
         return goodsName;
@@ -49,5 +27,13 @@ public class HostGoodsInfoF {
 
     public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public int getShowNum() {
+        return showNum;
+    }
+
+    public void setShowNum(int showNum) {
+        this.showNum = showNum;
     }
 }

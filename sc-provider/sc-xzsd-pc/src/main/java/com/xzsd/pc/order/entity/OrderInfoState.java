@@ -2,7 +2,7 @@ package com.xzsd.pc.order.entity;
 
 import java.util.Date;
 
-public class OrderInfoV {
+public class OrderInfoState {
     /**
      * 订单编号
      */
@@ -10,11 +10,12 @@ public class OrderInfoV {
     /**
      * 订单状态
      */
-    private int state;
+    private int OrderState;
     /**
      * 更新人
      */
     private String lastModifyBy;
+
 
     public String getOrderId() {
         return orderId;
@@ -24,12 +25,12 @@ public class OrderInfoV {
         this.orderId = orderId;
     }
 
-    public int getState() {
-        return state;
+    public int getOrderState() {
+        return OrderState;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setOrderState(int orderState) {
+        OrderState = orderState;
     }
 
     public String getLastModifyBy() {
@@ -39,5 +40,4 @@ public class OrderInfoV {
     public void setLastModifyBy(String lastModifyBy) {
         this.lastModifyBy = lastModifyBy;
     }
-
 }
