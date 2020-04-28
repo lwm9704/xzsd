@@ -31,7 +31,7 @@ public class CarController {
     /**
      * 新增购物车（添加商品）
      */
-    @RequestMapping("addCar")
+    @RequestMapping("addShoppingCar")
     public AppResponse addCar(CarInfoA carInfoA){
         try{
             String userId = SecurityUtils.getCurrentUserId();

@@ -31,7 +31,7 @@ public class OrderController {
     /**
      *新增订单(立即购买时)
      */
-    @RequestMapping("addOrder")
+    @RequestMapping("buyAtNow")
     public AppResponse addOrder(OrderDetailsU orderDetailsU){
         try{
             return orderService.addOrder(orderDetailsU);

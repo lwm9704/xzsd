@@ -13,5 +13,6 @@
         state = 1
         and
         is_delete = 0
+        order by sort asc
     </select>
 </mapper>

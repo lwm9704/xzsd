@@ -53,7 +53,7 @@
         version)
         value
         (#{orderId},
-        #{num},
+        #{goodsNum},
         #{totalPrice},
         0,
         #{userId},
