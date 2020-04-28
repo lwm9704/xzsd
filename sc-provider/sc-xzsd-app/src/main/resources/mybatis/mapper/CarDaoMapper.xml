@@ -24,7 +24,7 @@
         insert into t_shoppingCar
         (
         car_id,
-        goods_id
+        goods_id,
         num,
         total_price,
         state,

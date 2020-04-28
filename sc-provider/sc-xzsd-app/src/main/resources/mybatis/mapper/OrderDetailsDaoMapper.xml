@@ -46,19 +46,23 @@
         (order_id,
         goods_id,
         num,
-        price,
+        total_price,
         creat_by,
         creat_time,
+        last_modify_by,
+        modify_time,
         is_delete,
         version)
         value
         (#{orderId},
         #{goodsId},
         #{num},
-        #{price},
+        #{totalPrice},
         #{userId},
         now(),
         0,
+        #{userId},
+        now(),
         0)
     </insert>
 

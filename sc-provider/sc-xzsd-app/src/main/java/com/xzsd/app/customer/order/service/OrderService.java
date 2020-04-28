@@ -44,6 +44,7 @@ public class OrderService {
         //新增订单详情
         orderDetailsU.setTotalPrice(totalPrice);
         orderDetailsU.setUserId(userId);
+        orderDetailsU.setOrderId(orderId);
         int countDetail = orderDetailsDao.addOrderDetails(orderDetailsU);
         if(countDetail == 0){
             return AppResponse.bizError("新增订单详情失败");
