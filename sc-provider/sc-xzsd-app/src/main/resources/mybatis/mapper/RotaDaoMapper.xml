@@ -13,6 +13,6 @@
         state = 1
         and
         is_delete = 0
-        order by sort asc
+        order by rota_sort asc
     </select>
 </mapper>
