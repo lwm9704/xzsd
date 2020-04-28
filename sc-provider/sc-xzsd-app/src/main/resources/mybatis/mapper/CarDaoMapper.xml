@@ -41,7 +41,7 @@
         #{num},
         #{num}*#{price},
         1,
-        #{userId},
+        #{userId}
         )
     </insert>
 
