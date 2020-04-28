@@ -60,9 +60,9 @@
         #{totalPrice},
         #{userId},
         now(),
-        0,
         #{userId},
         now(),
+        0,
         0)
     </insert>
 
